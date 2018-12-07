@@ -6,7 +6,7 @@ const path = require("path");
 const users = require('./routes/api/users');
 const profiles = require('./routes/api/profiles');
 const posts = require('./routes/api/posts');
-const bodyParser = require('body-Parser');
+const bodyParser = require('body-parser');
 // server static assets if in production
 if(process.env.NODE_ENV === "production"){
     //set static folder

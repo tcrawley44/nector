@@ -7,11 +7,20 @@ const users = require('./routes/api/users');
 const profiles = require('./routes/api/profiles');
 const posts = require('./routes/api/posts');
 const bodyParser = require('body-parser');
-
-
+const nodes = require("./routes/api/nodes");
+const tree = require("./routes/api/tree");
 const app = express();
 
+const fs = require("fs");
 
+fs.readFile("input.txt", (err,data) => {
+    if (err) {
+        return console.error(err);
+     }
+     const str = data.toString();
+     const j = JSON.parse(str);
+     console.log(j.children[0].name);
+})
 
 
 //body parser middleware
@@ -37,6 +46,8 @@ require('./config/passport')(passport);
 app.use('/api/users', users);
 app.use('/api/profiles', profiles);
 app.use('/api/posts', posts);
+app.use('/api/nodes', nodes);
+app.use('/api/tree', tree);
 
 // server static assets if in production
 if(process.env.NODE_ENV === "production"){
@@ -51,3 +62,4 @@ if(process.env.NODE_ENV === "production"){
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`server runing on port ${port}`));
+console.log("sup biches");

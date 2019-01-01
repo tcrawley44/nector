@@ -1,0 +1,13 @@
+{"name":"Interests","children":[
+    {"name":"Cultural","children":[
+        {"name":"Music","children":[
+            {"name":"Metal","children":[]},
+            {"name":"EDM","children":[]}]}
+        ]},
+        {"name":"Movies","children":[]},
+        {"name":"Books","children":[]},
+        {"name":"Games","children":[]}
+    ]},
+    
+    {"name":"Conceptual","children":[{"name":"Politics","children":[]}]}
+]}

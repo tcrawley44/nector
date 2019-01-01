@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
-
+const fs = require('fs');
 //load profile model
 const profile = require('../../models/Profile');
 //load user profile
@@ -32,10 +32,9 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 
 
 
-// @route   GET api/profile/all
-// @desc    get all profiles
-// @access  public
-router.get('/all', (req,res) => {
+
+// old get all from mongo
+/* router.get('/all', (req,res) => {
     const errors = {};
     Profile.find()
     .populate('user','name')
@@ -52,9 +51,36 @@ router.get('/all', (req,res) => {
         res.status(404).json({profile: 'there are no profiles'})    
     )
 
+}); */
+
+router.get('/all', (req,res) => {
+
+    fs.readFile("People.txt", (err,data) => {
+        if (err) {
+            return console.error(err);
+        }
+        const str = data.toString();
+        const j = JSON.parse(str);
+
+        res.json(j);
+    })
+
 });
 
+router.post('/search', (req,res) => {
 
+    fs.readFile("People.txt", (err,data) => {
+        if (err) {
+            return console.error(err);
+        }
+        const str = data.toString();
+        const j = JSON.parse(str);
+        console.log(req.body.interests[0][1][1], "routeInterests");
+        console.log(j.people[0].interests);
+        res.json(j);
+    })
+
+});
 
 
 // @route   GET api/profile/handle/:handle
@@ -104,7 +130,7 @@ router.get('/user/:user_id', (req, res) => {
 // @access  private
 router.post(
     '/', 
-    passport.authenticate('jwt', {session: false}), 
+    //passport.authenticate('jwt', {session: false}), 
     (req, res) => {
 
         const {errors, isValid} = validateProfileInput(req.body);
@@ -118,24 +144,24 @@ router.post(
         }
         //get fields
         const profileFields = {};
-        profileFields.user = req.user.id;
-        if(req.body.handle) profileFields.handle = req.body.handle;
-        if(req.body.company) profileFields.company = req.body.company;
-        if(req.body.website) profileFields.website = req.body.website;
-        if(req.body.location) profileFields.location = req.body.location;
-        if(req.body.status) profileFields.status = req.body.status;
+        
+        if(req.body.name) profileFields.name = req.body.name;
+        if(req.body.sex) profileFields.sex = req.body.sex;
+        if(req.body.age) profileFields.age = req.body.age;
+        if(req.body.city) profileFields.city = req.body.city;
+        if(req.body.state) profileFields.state = req.body.state;
         //skills split into array
-        if(typeof req.body.skills !== 'undefined'){
-            profileFields.skills = req.body.skills.split(',');
+        if(typeof req.body.interests !== 'undefined'){
+            profileFields.interests = req.body.interests.split(',');
         }
 
         
-        profile.findOne({ user: req.user.id})
+        profile.findOne({ name: req.body.name})
             .then(profile => {
                 if(profile){
                     //update
                     Profile.findOneAndUpdate(
-                        { user: req.user.id}, 
+                        { name: req.user.name}, 
                         { $set: profileFields},
                         { new: true}
                     )
@@ -143,25 +169,59 @@ router.post(
                 }else{
                     //create
 
-                    //check if handle exists
-                    Profile.findOne({handle: profileFields.handle})
-                        .then(profile => {
-                            if(profile){
-                                errors.handle = 'that handle already exists';
-                                res.status(400).json(errors);
-                            }
+                    
 
-                            // save profile
-                            new Profile(profileFields).save().then(profile => res.json(profile));
-                        });
+                    new Profile(profileFields).save().then(profile => res.json(profile));
                         
+                         
                 }
             })
     }
     
 );
 
+// @route   POST api/profile/txt
+// @desc    create or edit user profile
+// @access  private
+router.post(
+    '/txt', 
+    //passport.authenticate('jwt', {session: false}), 
+    (req, res) => {
 
+        
+        //get fields
+        const profileFields = {};
+        
+        if(req.body.name) profileFields.name = req.body.name;
+        if(req.body.sex) profileFields.sex = req.body.sex;
+        if(req.body.age) profileFields.age = req.body.age;
+        if(req.body.city) profileFields.city = req.body.city;
+        if(req.body.state) profileFields.state = req.body.state;
+        if(req.body.interests) profileFields.interests = req.body.interests; 
+
+        fs.readFile("People.txt", (err,data) => {
+            if (err) {
+                return console.error(err);
+            }
+            const str = data.toString();
+            const j = JSON.parse(str);
+
+            j.people.push(profileFields);
+            const sj = JSON.stringify(j);
+
+            fs.writeFile('People.txt', sj, (err) => {  
+                // throws an error, you could also catch it here
+                if (err) throw err;
+            
+                // success case, the file was saved
+                console.log('saved!');
+            });
+        })
+        
+
+    }
+    
+);
 
 // @route   POST api/profile/experience
 // @desc    add experience to profile

@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames';
 import propTypes from 'prop-types';
-
+import "./fieldStyles.css";
 const TextFieldGroup = ({
     name,
     placeholder,
@@ -16,6 +16,8 @@ const TextFieldGroup = ({
   return (
     <div className="form-group">
         <input 
+            
+            autoComplete = "new-password"
             type={type}
             className={classnames("form-control form-control-lg" )}
             placeholder={placeholder} 
@@ -23,6 +25,7 @@ const TextFieldGroup = ({
             value = {value} 
             onChange = {onChange}
             disabled = {disabled}
+            
         />             
     </div>
   )

@@ -3,51 +3,36 @@ const Schema = mongoose.Schema;
 
 //Create Schema
 const ProfileSchema = new Schema({
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
-    },
-    handle: {
+    name: {
         type: String,
         required: true,
-        max: 40
+        
     },
-    company: {
-        type: String
+    
+    sex: {
+        type: String,
+        required: true,
     },
-    website: {
-        type: String
+    age: {
+        type: String,
+        required: true,
     },
-    location: {
-        type: String
+    city: {
+        type: String,
+        required: true,
     },
-    status: {
+    state: {
         type: String,
         required: true
     },
-    skills: {
+    interests: {
         type: [String],
         required: true
     },
     bio: {
         type: String,
-    },
-    experience: [
-        {
-            title: {
-                type: String, 
-                required: true
-            },
-            company: {
-                type: String,
-                required: true
-            },
-            location: {
-                type: String,
-            }
-            
-        }
-    ]
+    }
+    
 });
 
 module.exports = Profile = mongoose.model('profile', ProfileSchema);

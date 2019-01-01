@@ -1,0 +1,59 @@
+.add-person{
+    
+    height: 550px;
+    width: 400px;
+    overflow-y: scroll;
+    
+
+}
+
+.topbutton{
+    align-content: left;
+    color: red;
+    margin-left: 0;
+}
+
+.button{
+    margin-left: 50;
+}
+
+.interests{
+    height: 1000px;
+}
+
+.butt{
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    padding: 0px;
+}
+
+.butt2{
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+    padding: 0px;
+    margin-left: 10px; 
+    
+}
+
+.derp{
+    margin-left: 1px;
+    height: 30px;
+}
+
+.squish{
+    height: 35px;
+    width: 100px;
+    font-size: 15px;
+}
+
+.newChild{
+    margin-left: 14px;
+    
+}
+
+.nodeContainer{
+    margin-bottom: 14px; 
+    
+}

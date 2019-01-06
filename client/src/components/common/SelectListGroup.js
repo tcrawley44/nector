@@ -23,7 +23,7 @@ const SelectListGroup = ({
         <div className="form-group">
             <select
                 
-                className={classnames("form-control form-control-lg" )}
+                className={classnames("form-control form-control-lg p-1 " )}
                  
                 name={name}
                 value = {value} 

@@ -88,26 +88,10 @@ class ProfileInterests extends Component {
         }
         if(displayChildren){
             children = (
-                <div className = "nodeContainer">
+                <div >
                 {listItems}
                 
-                <form  className ="newChild" onSubmit = {this.onSubmit}>
-                        <div className = "row derp"> 
-                            <input
-                    
-                                className = "form-control squish form-control-lg" 
-                                placeholder="name"
-                                name="name"
-                                value = {this.state.name}
-                                onChange = {this.onChange}
-                                autoComplete = "off"
-                            />             
-                                      
-                                
-                               
-                            <input type = "submit" value= "+" className = "btn btn-info butt"/>
-                        </div>
-                    </form> 
+                
                 </div>
             )
         }else{
@@ -127,7 +111,7 @@ class ProfileInterests extends Component {
         //console.log("hello")
         return (
             <div>
-                <div className = "d-flex nodeContainer flex-row ml-2 bd-highlight mb-2">
+                <div className = "d-flex  flex-row ml-2 bd-highlight mb-2">
                                     
                     <button type = "button" id = "foo" ref = "foob" className = "btn btn-info ml-2" onClick ={() => {
                             this.setState(prevState => ({

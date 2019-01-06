@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import {GET_PROFILE,  PROFILE_LOADING, GET_ERRORS, GET_PROFILES, ADD_INTEREST, GET_INTERESTS, GET_RESULTS} from './types';
+import {GET_PROFILE, GET_GROUPS, PROFILE_LOADING, GET_ERRORS, GET_PROFILES, ADD_INTEREST, GET_INTERESTS, GET_RESULTS} from './types';
 import { NativeError } from "mongoose";
 
 // get current profile
@@ -53,14 +53,54 @@ export const createProfile = (profileData, history) => dispatch => {
         );
 }
 
+export const addFriendGroup = (current) => dispatch => {
+    
+    axios
+        .post("/api/profiles/addFriendGroup", current)
+        .then(res =>  console.log("derr"))
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: {}
+            })
+        );
+}
+
+export const getFriendGroups = (current) => dispatch => {
+    
+    axios
+        .post("/api/profiles/getFriendGroups", current)
+        .then(res =>  
+            dispatch({
+                type: GET_GROUPS,
+                payload: res.data
+            })    )
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: {}
+            })
+        );
+}
+
+export const updateProfile = (data) => dispatch => {
+
+    axios
+        .post("/api/profiles/update",data)
+        .then(res =>  console.log("derr"))
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: {}
+            })
+        );
+}
+
 export const searchPeople = (data) => dispatch => {
     axios
         .post("/api/profiles/search", data)
         .then(res =>
-            dispatch({
-                type: GET_RESULTS,
-                payload: res.data
-            })       
+            console.log("done")     
         )
         .catch(err => 
             dispatch({

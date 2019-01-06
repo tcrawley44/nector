@@ -1,11 +1,13 @@
-import {GET_PROFILE, GET_PROFILES, PROFILE_LOADING, ADD_INTEREST, GET_INTERESTS} from '../actions/types';
+import {GET_PROFILE, GET_RESULTS, GET_PROFILES, PROFILE_LOADING, ADD_INTEREST, GET_INTERESTS, GET_GROUPS} from '../actions/types';
 
 
 const initialState = {
     profile: null,
     profiles: null,
     loading: false,
-    interests: []
+    interests: [],
+    groups: "",
+    
 }
 
 export default function(state = initialState, action) {
@@ -38,6 +40,12 @@ export default function(state = initialState, action) {
                 ...state, 
                 
             }
+        case GET_GROUPS:
+            return{
+                ...state,
+                groups: action.payload
+            }
+        
         default: 
             return state; 
     }

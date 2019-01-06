@@ -5,7 +5,7 @@ import store from './store';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import {setCurrentUser} from './actions/authActions';
-
+import SearchPerson from './components/search-people/SearchPeople';
 
 
 import Home from "./components/home/Home";
@@ -56,7 +56,11 @@ class App extends Component {
         </Router> */}
         <div className = "full bg-dark">
           <Router>
-            <Home />
+            <div>
+              <Home />
+              <Route exact path = '/search-person' component = {SearchPerson} />
+            </div>
+            
           </Router>
         </div>
         

@@ -1,10 +1,14 @@
-import { GET_ERRORS, GET_NODE} from './types';
+import { GET_ERRORS, GET_NODE, IS_UPDATED} from './types';
 import axios from 'axios';
 
 export const addNode = (name, parent) => dispatch => {
     axios
         .post('/api/nodes/', {name, parent} )
-        .then(res => console.log(res))
+        .then(res => 
+            dispatch({
+                type: IS_UPDATED,
+                payload: res.data
+            }))
         .catch(err => 
             dispatch({
                 type: GET_ERRORS,

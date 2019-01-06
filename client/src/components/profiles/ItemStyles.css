@@ -38,3 +38,10 @@ p{
     width: 400px;
     overflow-y: scroll;
 }
+
+.squish2{
+    height: 35px;
+    width: 110px;
+    font-size: 15px;
+    
+}

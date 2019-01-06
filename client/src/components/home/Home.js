@@ -95,7 +95,7 @@ class Home extends Component {
                                         displayProfiles: !prevState.displayProfiles
                                     }))}}>
                                     
-                                    My People
+                                    List People
                                 </button>
                                 <button className = "btn btn-dark listButton bn-info" onClick ={() => {
                                     this.setState(prevState => ({

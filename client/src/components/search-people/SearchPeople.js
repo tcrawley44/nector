@@ -51,6 +51,9 @@ class SearchPeople extends Component {
         e.preventDefault();
 
         
+        this.setState(prevState => ({
+            displayResults: !prevState.displayResults
+        }))
         //console.log(this.props.interests, "interests here");
         const profileData = {
             name: this.state.name,
@@ -67,20 +70,46 @@ class SearchPeople extends Component {
     }
 
     getDataFromChild = (dataFromChild) => {
-        console.log(dataFromChild);
-        //this.state.interests = this.state.interests.push(dataFromChild);
-        console.log(this.state.interests[0]);
-        //empty
+        const mergeTrees = (parentTree, childTree) => {
+            let found = false; 
+            let searchedAllChildren = false; 
+            let i = 1; 
+            let atTheEnd = false; 
+            console.log(childTree, parentTree);
+            if(childTree[1] === undefined || parentTree[i] === undefined){
+                atTheEnd = true; 
+                console.log("true");
+            }
+            while(!found && !searchedAllChildren && !atTheEnd){
+                console.log("childtree", childTree[1][0], "parenttree", parentTree[i][0])
+                console.log("makes it here?")
+                if(childTree[1][0] === parentTree[i][0]){
+                    found = true; 
+                }
+                if((parentTree.length != 1)&&(i != (parentTree.length-1))&&(!found)){
+                    i = i + 1; 
+                }else{
+                    searchedAllChildren = true; 
+                }
+
+            }
+            console.log("makes it here2?")
+            if(found){
+                console.log("i",i);
+                mergeTrees(parentTree[i],childTree[1]);
+            }else{
+                
+                    parentTree.push(childTree[1]);
+                
+                
+            }
+        }
+        console.log("child being sent: ", dataFromChild)
         if(this.state.interests[0] === undefined){
             this.state.interests.push(dataFromChild);
         }else{
-            console.log(this.state.interests[1]);
-            //same second level
-            if(dataFromChild[1][0] === this.state.interests[0][1][0]){
-                this.state.interests[0][1].push(dataFromChild[1][1])
-            }else{//not same second level
-                this.state.interests[0].push(dataFromChild[1]);
-            }
+            mergeTrees(this.state.interests[0],dataFromChild)
+            //console.log(this.state.interests, "after mergeTree");
         }
         
     }
@@ -98,7 +127,7 @@ class SearchPeople extends Component {
     }
 
     render() {
-        const {errors} = this.state; 
+        const {errors, displayResults} = this.state; 
         
         const {tree} = this.props; 
         //console.log(tree);
@@ -113,95 +142,113 @@ class SearchPeople extends Component {
             
             {label: 'female', value: "female"}
         ];
-
-       
-
-        return (
-            <div className = "add-person">
-                <div className = "container">
-                    <div className = "row">
-                        <div className = "col-md-8 m-auto">
-                            <h1 className = "display-4 text-center">Search People</h1>
-                            <p className = "lead text-center">
-                                enter info
-                            </p>
-                            <small className = "d-block pb-3">leave blank if irrelevant</small>
-
-                            <form  onSubmit = {this.onSubmit}>
-                               
-                                <TextFieldGroup 
-                                    placeholder = "name"
-                                    name = "name"
-                                    value = {this.state.name}
-                                    onChange = {this.onChange}
-                                    error = {errors.name}
-                                    info = "name"
-                                    autoComplete = "off"
-                                    
-                                />
-                                <SelectListGroup 
-                                    placeholder = "sex"
-                                    name = "sex"
-                                    value = {this.state.sex}
-                                    onChange = {this.onChange}
-                                    options = {options}
-                                    error = {errors.sex}
-                                    info = "sex"
-                                />
-                                <TextFieldGroup 
-                                    placeholder = "age"
-                                    name = "age"
-                                    value = {this.state.age}
-                                    onChange = {this.onChange}
-                                    error = {errors.age}
-                                    info = "age"
-                                />
-                                <TextFieldGroup 
-                                    placeholder = "city"
-                                    name = "city"
-                                    value = {this.state.city}
-                                    onChange = {this.onChange}
-                                    error = {errors.city}
-                                    info = "city"
-                                />
-                                <TextFieldGroup 
-                                    placeholder = "state"
-                                    name = "state"
-                                    value = {this.state.state}
-                                    onChange = {this.onChange}
-                                    error = {errors.state}
-                                    info = "state"
-                                />
-                                
-                                
-                                
-                                
-                                
-
-                               
-                                <input type = "submit" value= "Submit" className = "btn btn-info btn-block mt-4"/>
-                            </form>   
-                        
-                        </div>
+        let display;
+        if(displayResults){
+            display = (
+                <div className = "add-person">
+                    <div className = "container">
+                        <h1>results here</h1>
                     </div>
                 </div>
-                <br />
-                <div className = "interests">
-                    <div className = "row">
-                        <div className = "col">
-                             <br />
+            )
+        }else{
+            display = (
+                <div className = "add-person">
+                    <div className = "container">
+                        <div className = "row">
+                            <div className = "col-md-8 m-auto">
+                                <h1 className = "display-5 text-center">Search People</h1>
+                                <p className = "lead text-center">
+                                    enter info
+                                </p>
+                                <small className = "d-block pb-3">leave blank if irrelevant</small>
+
+                                <form  onSubmit = {this.onSubmit}>
+                                
+                                    <TextFieldGroup 
+                                        placeholder = "name"
+                                        name = "name"
+                                        value = {this.state.name}
+                                        onChange = {this.onChange}
+                                        error = {errors.name}
+                                        info = "name"
+                                        autoComplete = "off"
+                                        
+                                    />
+                                    <SelectListGroup 
+                                        placeholder = "sex"
+                                        name = "sex"
+                                        value = {this.state.sex}
+                                        onChange = {this.onChange}
+                                        options = {options}
+                                        error = {errors.sex}
+                                        info = "sex"
+                                    />
+                                    <TextFieldGroup 
+                                        placeholder = "age"
+                                        name = "age"
+                                        value = {this.state.age}
+                                        onChange = {this.onChange}
+                                        error = {errors.age}
+                                        info = "age"
+                                    />
+                                    <TextFieldGroup 
+                                        placeholder = "city"
+                                        name = "city"
+                                        value = {this.state.city}
+                                        onChange = {this.onChange}
+                                        error = {errors.city}
+                                        info = "city"
+                                    />
+                                    <TextFieldGroup 
+                                        placeholder = "state"
+                                        name = "state"
+                                        value = {this.state.state}
+                                        onChange = {this.onChange}
+                                        error = {errors.state}
+                                        info = "state"
+                                    />
+                                    
+                                    
+                                    
+                                    
+                                    
+
+                                
+                                    <input type = "submit" value= "Submit" className = "btn btn-info btn-block mt-4"/>
+                                </form>   
                             
-                            <h1 className = "display-4 text-center">Interests</h1>
-                            
-                            <Interests sendDataToParent = {this.getDataFromChild} tree2 = {tree.tree} />
-                             
-                            <div className = "container">
                             </div>
                         </div>
                     </div>
+                    <br />
+                    <div className = "interests">
+                        <div className = "row">
+                            <div className = "col">
+                                <br />
+                                
+                                <h1 className = "display-5 text-center">Interests</h1>
+                                
+                                <Interests sendDataToParent = {this.getDataFromChild} tree2 = {tree.tree} />
+                                
+                                <div className = "container">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
-                
+            )
+        }
+        
+       
+
+        return (
+            <div>
+
+                {display}
             </div>
+            
         )
     }
 }

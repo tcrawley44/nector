@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import SelectListGroup from "../common/SelectListGroup";
-import {createProfile, getInterests} from "../../actions/profileActions";
+import {createProfile, getInterests, updateProfile} from "../../actions/profileActions";
 import Interests from "../add-person/Interests";
 import{getTree,test} from "../../actions/treeactions";
 import {addNode} from "../../actions/nodeActions";
@@ -27,10 +27,10 @@ class EditPerson extends Component {
             state: "",
             interests: [],
             bio: "",
-            errors: {}
-            
+            errors: {},
+            derr: ""
         }
-        this.props.test();
+        
         //this.props.addNode("Books", "Conceptual");
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -38,11 +38,11 @@ class EditPerson extends Component {
     }
     
     componentDidMount(){
-        
+        this.props.test();
     }
 
     componentWillReceiveProps(nextProps){
-
+        this.setState({derr: this.derr});
         if(nextProps.errors){
             this.setState({errors: nextProps.errors});
         }
@@ -62,27 +62,59 @@ class EditPerson extends Component {
             interests: this.state.interests,
             bio: this.state.bio
         }
+        profileData.name = this.props.current.name;
+        console.log(profileData.name);
         //console.log("what about here");
-        this.props.createProfile(profileData, this.props.history);
+        this.props.updateProfile(profileData);
     }
 
     getDataFromChild = (dataFromChild) => {
-        console.log(dataFromChild);
-        //this.state.interests = this.state.interests.push(dataFromChild);
-        console.log(this.state.interests[0]);
-        //empty
+        const mergeTrees = (parentTree, childTree) => {
+            let found = false; 
+            let searchedAllChildren = false; 
+            let i = 1; 
+            let atTheEnd = false; 
+            console.log(childTree, parentTree);
+            if(childTree[1] === undefined || parentTree[i] === undefined){
+                atTheEnd = true; 
+                console.log("true");
+            }
+            while(!found && !searchedAllChildren && !atTheEnd){
+                console.log("childtree", childTree[1][0], "parenttree", parentTree[i][0])
+                console.log("makes it here?")
+                if(childTree[1][0] === parentTree[i][0]){
+                    found = true; 
+                }
+                if((parentTree.length != 1)&&(i != (parentTree.length-1))&&(!found)){
+                    i = i + 1; 
+                }else{
+                    searchedAllChildren = true; 
+                }
+
+            }
+            console.log("makes it here2?")
+            if(found){
+                console.log("i",i);
+                mergeTrees(parentTree[i],childTree[1]);
+            }else{
+                
+                    parentTree.push(childTree[1]);
+                
+                
+            }
+        }
+        console.log("child being sent: ", dataFromChild)
         if(this.state.interests[0] === undefined){
             this.state.interests.push(dataFromChild);
         }else{
-            console.log(this.state.interests[1]);
-            //same second level
-            if(dataFromChild[1][0] === this.state.interests[0][1][0]){
-                this.state.interests[0][1].push(dataFromChild[1][1])
-            }else{//not same second level
-                this.state.interests[0].push(dataFromChild[1]);
-            }
+            mergeTrees(this.state.interests[0],dataFromChild)
+            console.log(this.state.interests, "after mergeTree");
         }
         
+    }
+
+    getUpdateFromChild = () => {
+        this.props.test();
     }
 
     onChange(e) {
@@ -176,14 +208,14 @@ class EditPerson extends Component {
                                 
                                 
                                 
-                                <TextAreaFieldGroup 
+                                {/* <TextAreaFieldGroup 
                                     placeholder = "bio"
                                     name = "bio"
                                     value = {this.state.bio}
                                     onChange = {this.onChange}
                                     error = {errors.bio}
                                     info = "bio"
-                                />
+                                /> */}
 
                                
                                 <input type = "submit" value= "Submit" className = "btn btn-info btn-block mt-4"/>
@@ -200,7 +232,7 @@ class EditPerson extends Component {
                             
                             <h1 className = "display-4 text-center">Interests</h1>
                             
-                            <Interests sendDataToParent = {this.getDataFromChild} tree2 = {tree.tree} />
+                            <Interests updateParent = {this.getUpdateFromChild} sendDataToParent = {this.getDataFromChild} tree2 = {tree.tree} />
                              
                             <div className = "container">
                             </div>
@@ -228,4 +260,4 @@ const mapStateToProps = state => ({
     interests: state.interests
 });
 
-export default connect(mapStateToProps, {createProfile, addNode, test, getInterests})(withRouter(EditPerson));
+export default connect(mapStateToProps, {updateProfile, createProfile, addNode, test, getInterests})(withRouter(EditPerson));

@@ -11,3 +11,5 @@ export const GET_TEST = "GET_TEST";
 export const ADD_INTEREST = "ADD_INTEREST";
 export const GET_INTERESTS = "GET_INTERESTS";
 export const GET_RESULTS = "GET_RESULTS";
+export const GET_GROUPS = "GET_GROUPS"
+export const IS_UPDATED = "IS_UPDATED";

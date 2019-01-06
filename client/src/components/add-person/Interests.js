@@ -17,12 +17,14 @@ class Interests extends Component {
         this.state = {
            
            name: "",
-           parentName: ""
-        
+           parentName: "",
+           interests: []
+           
         }
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         //this.props.test();
+        
         
     }
         
@@ -41,6 +43,8 @@ class Interests extends Component {
         //console.log(data.name, this.state.parentName );
         
         this.props.addNode(data.name, this.state.parentName);
+        
+        this.props.updateParent();
     }
 
     
@@ -53,14 +57,18 @@ class Interests extends Component {
 
     
     getDataFromChild = (dataFromChild) => {
-        console.log(dataFromChild);
+        //console.log(dataFromChild);
         let passUp = [this.props.tree2.name, dataFromChild]
         this.props.sendDataToParent(passUp);
         this.refs.foob.style = 'background-color: red';
         
         
+        
     }
    
+    getUpdateFromChild = () => {
+        this.props.updateParent();
+    }
 
     render() {
         const { displayChildren} = this.state; 
@@ -72,7 +80,7 @@ class Interests extends Component {
             //console.log(this.props.tree2.children);
             listItems = this.props.tree2.children.map((node) =>
                 <div key = {node.name}>
-                    <InterestPort sendDataToParent = {this.getDataFromChild} key = {node.name} tree2 = {node} />
+                    <InterestPort updateParent = {this.getUpdateFromChild} sendDataToParent = {this.getDataFromChild} key = {node.name} tree2 = {node} />
                 </div>
             );
             //console.log(listItems);

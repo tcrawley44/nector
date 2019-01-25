@@ -5,7 +5,7 @@ p{
 
 .profiles{
     
-        height: 450px;
+        height: 800px;
         width: 400px;
         overflow-y: scroll;
         margin-top: 10px; 
@@ -44,4 +44,8 @@ p{
     width: 110px;
     font-size: 15px;
     
+}
+
+.equal{
+    width: 100px;
 }

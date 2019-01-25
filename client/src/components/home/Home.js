@@ -5,6 +5,7 @@ import AddPerson from "../add-person/AddPerson";
 import Profiles from "../profiles/Profiles";
 import EditPerson from "../edit-person/EditPerson";
 import SearchPeople from "../search-people/SearchPeople"
+import {withRouter, Link} from "react-router-dom";
 class Home extends Component {
     
     constructor(props) {
@@ -44,14 +45,21 @@ class Home extends Component {
             box = (
                 <div>
                     
-                    <button className = "btn btn-dark listButton bn-info" onClick ={() => {
+                    {/* <button className = "btn btn-dark listButton bn-info" onClick ={() => {
                         this.setState(prevState => ({
                             displayProfiles: !prevState.displayProfiles
                         }))}}>
                         
                         Back
-                    </button>
-                    <Profiles />
+                    </button> */}
+                    <Link to="/" className = "btn btn-dark listButton bn-info">Back</Link>
+                        
+                        <Route exact path = "/" component = {Profiles} />
+                        <Route exact path = '/search-person' component = {SearchPeople} />
+                        <Route exact path = "/add-person" component = {AddPerson} />
+                        
+                    
+                    
                 </div>
             )
         }
@@ -144,4 +152,4 @@ class Home extends Component {
 }
 
 
-export default Home; 
+export default withRouter(Home); 

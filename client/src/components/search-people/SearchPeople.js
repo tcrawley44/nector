@@ -10,7 +10,7 @@ import Interests from "../add-person/Interests";
 import{getTree,test} from "../../actions/treeactions";
 import {addNode} from "../../actions/nodeActions";
 import "./SearchStyles.css";
-
+import {Link} from 'react-router-dom';
 
 
 class SearchPeople extends Component {
@@ -61,7 +61,7 @@ class SearchPeople extends Component {
             age: this.state.age,
             city: this.state.city,
             state: this.state.state, 
-           
+            currentUserId: this.props.auth.id,
             interests: this.state.interests,
             bio: this.state.bio
         }
@@ -144,10 +144,27 @@ class SearchPeople extends Component {
         ];
         let display;
         if(displayResults){
+            let results1 = this.props.profile.matches.map(match => (
+                             
+                <div className = "btn personButton btn-info" >
+                    
+                    {match}
+                    
+                </div>
+                /* <ProfileItem key = {profile._id} profile = {profile} /> */
+            ))
             display = (
                 <div className = "add-person">
+                    <Link to = {"profile/" + this.props.auth.id} className = "btn btn-info">Back</Link>
+                            
+                    
                     <div className = "container">
-                        <h1>results here</h1>
+                        <div className = "row">
+
+                            <div className = "col-6">
+                                {results1}
+                            </div>
+                        </div>
                     </div>
                 </div>
             )
@@ -245,7 +262,7 @@ class SearchPeople extends Component {
 
         return (
             <div>
-
+                
                 {display}
             </div>
             
@@ -258,14 +275,16 @@ SearchPeople.propTypes = {
     errors: PropTypes.object.isRequired,
     test: PropTypes.func.isRequired,
     tree: PropTypes.object.isRequired,
-    interests: PropTypes.object
+    interests: PropTypes.object,
+    auth: PropTypes.object
 }
 
 const mapStateToProps = state => ({
     profile: state.profile,
     errors: state.errors,
     tree: state.tree,
-    interests: state.interests
+    interests: state.interests,
+    auth: state.auth
 });
 
 export default connect(mapStateToProps, {createProfile, addNode, test, getInterests, searchPeople})(withRouter(SearchPeople));

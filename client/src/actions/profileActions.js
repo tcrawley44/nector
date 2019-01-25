@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import {GET_PROFILE, GET_GROUPS, PROFILE_LOADING, GET_ERRORS, GET_PROFILES, ADD_INTEREST, GET_INTERESTS, GET_RESULTS} from './types';
+import {GET_ID, GET_MATCHES, GET_PROFILE, GET_NETWORK, GET_GROUPS, PROFILE_LOADING, GET_ERRORS, GET_PROFILES, ADD_INTEREST, GET_INTERESTS, GET_RESULTS} from './types';
 import { NativeError } from "mongoose";
 
 // get current profile
@@ -20,6 +20,25 @@ export const getCurrentProfile = () => dispatch => {
             })  
         )
 }
+
+// get network
+export const getNetwork = () => dispatch => {
+    
+    axios.get('/api/profiles/network')
+        .then(res => 
+            dispatch({
+                type: GET_NETWORK,
+                payload: res.data
+            })    
+        )
+        .catch(err => 
+            dispatch({
+                type: GET_ERRORS,
+                payload: {}
+            })  
+        )
+}
+
 
 // get profile by handle
 export const getProfileByHandle = (handle) => dispatch => {
@@ -100,7 +119,29 @@ export const searchPeople = (data) => dispatch => {
     axios
         .post("/api/profiles/search", data)
         .then(res =>
-            console.log("done")     
+            dispatch({
+                type: GET_MATCHES,
+                payload: res.data
+
+            })  
+        )
+        .catch(err => 
+            dispatch({
+                type: GET_RESULTS,
+                payload: null
+            })  
+        )
+}
+
+//return id
+export const searchByName = (data) => dispatch => {
+    axios
+        .post("/api/profiles/searchByName", data)
+        .then(res =>
+            dispatch({
+                type: GET_ID,
+                payload: res.data
+            })      
         )
         .catch(err => 
             dispatch({

@@ -3,11 +3,13 @@ import {connect} from 'react-redux';
 import {withRouter} from "react-router-dom";
 import PropTypes from 'prop-types';
 import "../add-person/AddPersonStyles.css";
+import "./ItemStyles.css";
 import TextFieldGroup from "../common/TextFieldGroup";
 import {addNode,getNodes} from "../../actions/nodeActions";
 import {getTree,test} from "../../actions/treeactions";
-import {addInterest, getInterests} from "../../actions/profileActions";
-
+import {addInterest, getInterests, getProfiles} from "../../actions/profileActions";
+import {Link} from 'react-router-dom';
+import ProfileQueries from "./ProfileQueries";
 
 class ProfileInterests extends Component {
 
@@ -27,7 +29,7 @@ class ProfileInterests extends Component {
     }
         
     componentDidMount(){
-        
+        this.props.getProfiles();
     }
        
     onSubmit(e){
@@ -70,6 +72,7 @@ class ProfileInterests extends Component {
         
         if(!(this.props.tree2 === "" || undefined)){
             //console.log(this.props.tree2.children);
+            console.log(this.props.tree2, "tree2");
             let len = this.props.tree2.length;
             let newSlice;
             console.log("len",len);
@@ -108,19 +111,94 @@ class ProfileInterests extends Component {
             buttonName = this.props.tree2[0];
             this.state.parentName = buttonName; 
         }   
+        let butt; 
+
+
+        
+
+        
+        switch (buttonName) {
+        case "Add":
+            butt = (
+                <Link to="/add-person" className="btn  btn-info  ml-2">Add</Link>
+            )
+            break;
+        case "All":
+            butt = (
+                <div  className="btn  btn-info  ml-2" onClick ={() => {
+                    this.setState(prevState => ({
+                        displayChildren: !prevState.displayChildren
+                    }))
+                    
+                    
+                }}>All</div>
+            )
+            if(displayChildren){
+                children = (
+                    this.props.profile.profile.people.map((node) =>
+                        <div className="btn  btn-info mt-2 ml-2" key = {node.name}>
+                            {node.name}
+                        </div>
+                    )
+                )
+            }
+            
+            break; 
+        case "Queries":
+            butt = (
+                <button type = "button" id = "foo" ref = "foob" className = "btn btn-info  ml-2 " onClick ={() => {
+                        this.setState(prevState => ({
+                            displayChildren: !prevState.displayChildren
+                        }))
+                        
+                        
+                    }}>
+                Queries
+                
+                </button> 
+            )
+            if(displayChildren){
+                children = (
+                    <div className = "ml-3">
+                        <ProfileQueries />
+                    </div>
+                    
+                )
+            }
+        
+        
+            break;
+        case "New Query":
+            butt = (
+
+                <Link to= "/search-person" className = "btn btn-info">New Query</Link>
+            )
+            
+            break;
+        default:
+            butt = (
+                <button type = "button" id = "foo" ref = "foob" className = "btn btn-info  ml-2 " onClick ={() => {
+                        this.setState(prevState => ({
+                            displayChildren: !prevState.displayChildren
+                        }))
+                        if(buttonName === "Add"){
+                            console.log("equals");
+                            
+                        }
+                        
+                    }}>
+                {buttonName}
+                
+            </button> 
+            )
+        }
+        
         //console.log("hello")
         return (
             <div>
                 <div className = "d-flex  flex-row ml-2 bd-highlight mb-2">
                                     
-                    <button type = "button" id = "foo" ref = "foob" className = "btn btn-info ml-2" onClick ={() => {
-                            this.setState(prevState => ({
-                                displayChildren: !prevState.displayChildren
-                            }))
-                        }}>
-                        {buttonName}
-                        
-                    </button> 
+                    {butt}
                     {/* <button className = "btn .text-secondary btn-info butt2" onClick ={() => {
                             this.refs.foob.style = 'background-color: red';
                             this.props.addInterest(buttonName);
@@ -148,15 +226,20 @@ ProfileInterests.propTypes = {
     //test: PropTypes.func.isRequired 
     //addNode: PropTypes.func
     //errors: PropTypes.object.isRequired
-    interests: PropTypes.object
+    interests: PropTypes.object,
+    getProfiles: PropTypes.func.isRequired,
+    profile: PropTypes.object,
+    auth: PropTypes.object
 }
 
 const mapStateToProps = state => ({
     //node: state.node
     //tree: state.tree
     //errors: state.errors
-    interests: state.interests
+    interests: state.interests,
+    profile: state.profile,
+    auth: state.auth
 })
 
-const ProfileInterestPort = connect(mapStateToProps, {addNode, getNodes, getTree, test, addInterest, getInterests})(withRouter(ProfileInterests));
+const ProfileInterestPort = connect(mapStateToProps, {addNode, getNodes, getTree, test, addInterest, getInterests,getProfiles})(withRouter(ProfileInterests));
 export default ProfileInterestPort;

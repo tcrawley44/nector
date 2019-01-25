@@ -67,6 +67,20 @@ router.get('/all', (req,res) => {
 
 });
 
+router.get('/network', (req,res) => {
+
+    fs.readFile("network.txt", (err,data) => {
+        if (err) {
+            return console.error(err);
+        }
+        const str = data.toString();
+        const j = JSON.parse(str);
+
+        res.json(j);
+    })
+
+});
+
 
 
 router.post('/addFriendGroup', (req,res) => {
@@ -152,26 +166,128 @@ router.post('/search', (req,res) => {
         const str = data.toString();
         const j = JSON.parse(str);
         let matches = [];
-         
+        
+        //looks in master tree for node. 
+        const searchTree = (parentTree, childTree) => {
+            
+            let found1= false; 
+            i2 = 1; 
+            while(i2 < parentTree.length && !found1){
+                if(parentTree[i2][0] === childTree[0]){
+                    if(childTree.length>1 && parentTree.length>1){
+                        searchTree(parentTree[i2], childTree[1]);
+                    }else{
+                        found1 = true; 
+                        matches.push(j.people[i].name);
+                    }
+                }
+                i2 = i2+1; 
+            }
+
+        }
+        //iterate through profiles
+        console.log(req.body.interests,"body interests");
         let i = 0; 
         while((i<j.people.length)){
-            if(j.people[i].interests[0].length > 1){
-                if(j.people[i].interests[0][1][0]===req.body.interests[0][1][0]){
-                
-                    matches.push(j.people[i].name);
-                }
-            }
+            
+            
+            
+            searchTree(j.people[i].interests[0], req.body.interests[0][1]);
+
+
             
             i = i + 1;
         }
+
+        
         
 
-        console.log(matches);
+        console.log(matches, "matches");
         res.json(matches);
+        let currentUserId = req.body.currentUserId; 
+        console.log("current user id: ", currentUserId);
+        j.people[currentUserId]["queries"] = [{name:"test", results: matches}];
+        const sj = JSON.stringify(j);
+         //save it back
+        fs.writeFile('People.txt', sj, (err) => {  
+            // throws an error, you could also catch it here
+            if (err) throw err;
+        
+            // success case, the file was saved
+            console.log('saved!');
+        });       
+
+    })
+
+
+});
+//search by name, return id
+router.post('/searchByName', (req,res) => {
+    console.log('its here');
+    fs.readFile("People.txt", (err,data) => {
+        if (err) {
+            return console.error(err);
+        }
+        const str = data.toString();
+        const j = JSON.parse(str);
+        console.log("body name", req.body.name)
+        let id; 
+        let i = 0; 
+        let found = false; 
+        while((i<j.people.length && !found)){
+            console.log(j.people[i].name);
+            if(j.people[i].name === req.body.name){
+                id = j.people[i].id
+                found = true; 
+            }else{
+                i = i + 1;
+            }
+            
+            
+        }
+        console.log(id);
+        console.log(req.body.email, "email here");
+        fs.readFile("logins.txt", (err,data) => {
+            if (err) {
+                return console.error(err);
+            }
+            const str = data.toString();
+            const k = JSON.parse(str);
+            let i2 = 0; 
+            let found2 = false; 
+            console.log(k.length);
+            while((i2<k.length && !found2)){
+                console.log(k[i2].email);
+                if(k[i2].email === req.body.email){
+                    
+                    found2 = true; 
+                }else{
+                    i2 = i2 + 1;
+                }
+                
+                
+            }
+            k[i2]["id"] = id;
+
+            const sj = JSON.stringify(k);
+                //save it back
+                fs.writeFile('logins.txt', sj, (err) => {  
+                    // throws an error, you could also catch it here
+                    if (err) throw err;
+                
+                    // success case, the file was saved
+                    console.log('saved!');
+                });
+        })
+        
+        res.json(id);
     })
 
 });
 
+
+
+//adds the new interests to current tree, i think currently it is only able to add a single node at at time. 
 router.post('/update', (req,res) => {
 
     fs.readFile("People.txt", (err,data) => {
@@ -187,27 +303,34 @@ router.post('/update', (req,res) => {
         let i = 0; 
         while(!found){
             console.log("name from database", j.people[i].interests,"name from request", req.body.interests, "end");
+
+            //search to find the person
             if(j.people[i].name === req.body.name){
-                console.log("found");
+                
                 found = true; 
-                console.log(j.people[i].interests[0][1]);
-                //j.people[i].interests[0]  parent, req.body.interests[0] child
+                
+                
+                //define the mergetree function
                 const mergeTrees = (parentTree, childTree) => {
+
                     let found = false; 
                     let searchedAllChildren = false; 
                     let i = 1; 
                     let atTheEnd = false; 
-                    console.log(childTree, parentTree);
+
+                    //check if at the end of a tree
                     if(childTree[1] === undefined || parentTree[i] === undefined){
                         atTheEnd = true; 
-                        console.log("true");
+                        
                     }
+
+                    //search children at that level
                     while(!found && !searchedAllChildren && !atTheEnd){
-                        console.log("childtree", childTree[1][0], "parenttree", parentTree[i][0])
-                        console.log("makes it here?")
+                        
                         if(childTree[1][0] === parentTree[i][0]){
                             found = true; 
                         }
+                        //conditional iteration
                         if((parentTree.length != 1)&&(i != (parentTree.length-1))&&(!found)){
                             i = i + 1; 
                         }else{
@@ -215,27 +338,34 @@ router.post('/update', (req,res) => {
                         }
         
                     }
-                    console.log("makes it here2?")
-                    if(found){
-                        console.log("i",i);
-                        mergeTrees(parentTree[i],childTree[1]);
+                    if((atTheEnd)&&(childTree[0]==parentTree[0])){
+
                     }else{
+                        if(found){
                         
-                            parentTree.push(childTree[1]);
-                        
-                        
+                            mergeTrees(parentTree[i],childTree[1]);
+                        }else{
+                                for(let k = 1; k < childTree.length; k++){
+                                    parentTree.push(childTree[k]);
+                                }
+                                
+                            
+                            
+                        }        
                     }
+                    
                 }
-                //console.log("child being sent: ", dataFromChild)
+                
+                //if interest tree is blank then push the child tree
                 if(j.people[i].interests === undefined){
                     j.people[i].interests.push(req.body.interests[0]);
-                }else{
+                }else{//otherwise merge the trees
                     mergeTrees(j.people[i].interests[0],req.body.interests[0])
-                    //console.log(this.state.interests, "after mergeTree");
+                    
                 }
 
                 const sj = JSON.stringify(j);
-
+                //save it back
                 fs.writeFile('People.txt', sj, (err) => {  
                     // throws an error, you could also catch it here
                     if (err) throw err;

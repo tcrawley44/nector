@@ -1,21 +1,39 @@
-import { GET_ERRORS,SET_CURRENT_USER} from './types';
+import { GET_ERRORS,SET_CURRENT_USER, GET_USER_ID} from './types';
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
 // Register user
-export const registerUser = (userData, history) => dispatch => {
+export const registerUser = (userData) => dispatch => {
     axios
-        .post('/api/users/register', userData)
-        .then(res => history.push('/login'))
+        .post('/api/auth/register', userData)
+        .then(res => 
+            dispatch({
+
+                type: SET_CURRENT_USER,
+                payload: res.data
+            
+            }))
+        .catch(err => 
+            console.log("error")
+        );
+};
+
+export const newLoginUser = userData => dispatch => {
+    axios.post('/api/auth/login', userData)
+        .then(res => {
+            dispatch({
+                type: GET_USER_ID,
+                payload: res.data
+            })
+            
+        })
         .catch(err => 
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
             })
-        );
-};
-
-
+        )
+}
 
 //login - get user token
 export const loginUser = userData => dispatch => {

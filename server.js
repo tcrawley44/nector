@@ -9,19 +9,49 @@ const posts = require('./routes/api/posts');
 const bodyParser = require('body-parser');
 const nodes = require("./routes/api/nodes");
 const tree = require("./routes/api/tree");
+const auth = require("./routes/api/auth");
 const app = express();
 
 const fs = require("fs");
 
-fs.readFile("input.txt", (err,data) => {
-    if (err) {
-        return console.error(err);
-     }
-     const str = data.toString();
-     const j = JSON.parse(str);
-     console.log(j.children[0].name);
-})
+const dataEdits = require("./dataEdits/dataEdits");
 
+//data edits
+{
+function addIds () {
+    fs.readFile("People.txt", (err,data) => {
+        if (err) {
+            return console.error(err);
+        }
+        const str = data.toString();
+        const j = JSON.parse(str);
+
+
+        let i = 0; 
+        
+        while(i < j.people.length){
+            j.people[i]["id"] = i.toString();
+            i = i + 1; 
+        }
+        
+
+        
+        const sj = JSON.stringify(j);
+        fs.writeFile('People.txt', sj, (err) => {  
+            // throws an error, you could also catch it here
+            if (err) throw err;
+        
+            // success case, the file was saved
+            console.log('saved!');
+        });
+            
+    })
+    
+}
+
+addIds();
+
+}
 
 //body parser middleware
 app.use(bodyParser.urlencoded({extended: false}));
@@ -48,6 +78,7 @@ app.use('/api/profiles', profiles);
 app.use('/api/posts', posts);
 app.use('/api/nodes', nodes);
 app.use('/api/tree', tree);
+app.use('/api/auth', auth);
 
 // server static assets if in production
 if(process.env.NODE_ENV === "production"){

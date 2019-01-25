@@ -1,4 +1,4 @@
-import {GET_PROFILE, GET_RESULTS, GET_PROFILES, PROFILE_LOADING, ADD_INTEREST, GET_INTERESTS, GET_GROUPS} from '../actions/types';
+import {GET_MATCHES, GET_ID, GET_PROFILE, GET_NETWORK, GET_RESULTS, GET_PROFILES, PROFILE_LOADING, ADD_INTEREST, GET_INTERESTS, GET_GROUPS} from '../actions/types';
 
 
 const initialState = {
@@ -7,7 +7,9 @@ const initialState = {
     loading: false,
     interests: [],
     groups: "",
-    
+    network: [],
+    id: "",
+    matches: []
 }
 
 export default function(state = initialState, action) {
@@ -45,7 +47,21 @@ export default function(state = initialState, action) {
                 ...state,
                 groups: action.payload
             }
-        
+        case GET_NETWORK:
+            return{
+                ...state,
+                network: action.payload
+            }
+        case GET_ID:
+            return{
+                ...state,
+                id: action.payload
+            }
+        case GET_MATCHES: 
+            return{
+                ...state,
+                matches: action.payload
+            }
         default: 
             return state; 
     }

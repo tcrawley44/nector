@@ -13,3 +13,7 @@ export const GET_INTERESTS = "GET_INTERESTS";
 export const GET_RESULTS = "GET_RESULTS";
 export const GET_GROUPS = "GET_GROUPS"
 export const IS_UPDATED = "IS_UPDATED";
+export const GET_NETWORK = "GET_NETWORK";
+export const GET_USER_ID = "GET_USER_ID";
+export const GET_ID = "GET_ID";
+export const GET_MATCHES = "GET_MATCHES";

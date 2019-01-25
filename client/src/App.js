@@ -5,9 +5,10 @@ import store from './store';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import {setCurrentUser} from './actions/authActions';
-import SearchPerson from './components/search-people/SearchPeople';
-
-
+import Profiles from "./components/profiles/Profiles";
+import SearchPeople from './components/search-people/SearchPeople';
+import Login from './components/home/Login';
+import Welcome from "./components/home/Welcome";
 import Home from "./components/home/Home";
 
 import './App.css';
@@ -55,13 +56,44 @@ class App extends Component {
           </div>
         </Router> */}
         <div className = "full bg-dark">
-          <Router>
+          
             <div>
-              <Home />
-              <Route exact path = '/search-person' component = {SearchPerson} />
+              <Router>
+              <div className = "hold bg-dark">
+                <div className = "row">
+                    <div className = "col-4">
+                        {/* <div className = "addPerson" >
+                            <Dashboard />
+                        </div> */}
+                    
+                    </div> 
+                    
+                      <div className = "col-4 ">
+                          
+                      <div className = "profileContainer container">
+                        <div>
+                          <Route exact path = '/' component = {Login} />
+                          <Route exact path = '/profile/:id' component = {Profiles} />
+                          <Route exact path = '/search-person' component = {SearchPeople} />
+                          <Route exact path = '/welcome' component = {Welcome} />
+                        </div>
+                      </div>    
+
+                          
+
+                      </div>
+                    
+
+                    
+                </div>
+             </div>
+
+
+                
+              </Router>
             </div>
             
-          </Router>
+          
         </div>
         
         

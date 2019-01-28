@@ -193,7 +193,7 @@ class Login extends Component {
                     <div className = "btn btn-info btn-block mt-4" onClick ={() => {
                             this.setState(prevState => ({
                                 displaySignUp: !prevState.displaySignUp
-                            }))}}>Sign Up
+                            }))}}>Sign Up2
                     </div>  
                 </div>
             </div>

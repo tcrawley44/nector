@@ -206,7 +206,7 @@ class Login extends Component {
                         <div className = "row ">
                             <div className = "col-sm"></div>
                             <div className = "col-sm">
-                                <h1>Nector</h1>
+                                <h1>Nectorr</h1>
                             </div>
                             <div className = "col-sm"></div>
                         </div>

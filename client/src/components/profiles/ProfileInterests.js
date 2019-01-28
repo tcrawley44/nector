@@ -68,6 +68,7 @@ class ProfileInterests extends Component {
         const { displayChildren} = this.state; 
         
         let children; 
+        let children2;
         let listItems;
         
         if(!(this.props.tree2 === "" || undefined)){
@@ -158,9 +159,17 @@ class ProfileInterests extends Component {
                 </button> 
             )
             if(displayChildren){
+                children2 = (
+                    this.props.profile.profile.people[this.props.auth.id].queries.map((q) =>
+                        <ProfileQueries current1 = {q}/>
+                    )
+                        
+                )
                 children = (
+
                     <div className = "ml-3">
-                        <ProfileQueries />
+                        <Link to= "/search-person" className = "btn btn-info mb-2">New Query</Link>
+                        {children2}
                     </div>
                     
                 )

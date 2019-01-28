@@ -18,7 +18,7 @@ class SearchPeople extends Component {
     constructor(props) {
         super(props);
         this.state = {
-           
+            queryName: "",
             name: "",
             sex: "",
             age: "",
@@ -56,6 +56,7 @@ class SearchPeople extends Component {
         }))
         //console.log(this.props.interests, "interests here");
         const profileData = {
+            queryName: this.state.queryName,
             name: this.state.name,
             sex: this.state.sex,
             age: this.state.age,
@@ -182,6 +183,17 @@ class SearchPeople extends Component {
 
                                 <form  onSubmit = {this.onSubmit}>
                                 
+                                    <TextFieldGroup 
+                                        placeholder = "query name"
+                                        name = "queryName"
+                                        value = {this.state.queryName}
+                                        onChange = {this.onChange}
+                                        error = {errors.name}
+                                        info = "queryName"
+                                        autoComplete = "off"
+                                        
+                                    />
+                                    <div className = "mt-5"></div>
                                     <TextFieldGroup 
                                         placeholder = "name"
                                         name = "name"

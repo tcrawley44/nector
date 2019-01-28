@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const bcrypt = require("bcryptjs");
 const fs = require('fs');
 
 router.post('/register', (req, res) => {
@@ -17,7 +17,7 @@ router.post('/register', (req, res) => {
         //console.log(j.people.indexOf("Tyler Crawley"));
        
         
-        let name2 = {email:req.body.email,password:req.body.password};
+        let name2 = {email:req.body.email,password:req.body.password };
         j.push(name2);
 
         
@@ -57,14 +57,19 @@ router.post('/login', (req, res) => {
             if((j[i].email === req.body.email) && (j[i].password === req.body.password)){
                 console.log("found");
                 found = true; 
-                res.json(j[i].id);
+                
             }else{
                 i = i + 1; 
             }
         }
 
+        if(found){
+            res.json(j[i].id);
+        }else{
+            res.status(404)
+        }
         
-        console.log(j[i].id);
+        
         
         
             

@@ -58,8 +58,47 @@ class Login extends Component {
     }
 
   render() {
-      const {displaySignUp} = this.state;
+      const {displaySignUp, displayEmailErrors} = this.state;
       let display; 
+      let emailErrors;
+      let emailErrorMessage; 
+      let emailInput; 
+
+      if(displayEmailErrors){
+        emailErrors = (
+            <p className = "mb-0 ml-4"> email not found</p>
+        );
+        emailInput = (
+            <input 
+                autoComplete = "new-password"
+                type ="email"
+                className="form-control form-control-lg mb-0 " 
+                placeholder="email"
+                name="email"
+                value = {this.state.email} 
+                onChange = {this.onChange}
+                            
+
+
+            /> 
+        )
+      }else{
+          emailInput =(
+            <input 
+                autoComplete = "new-password"
+                type ="email"
+                className="form-control form-control-lg mb-3 " 
+                placeholder="email"
+                name="email"
+                value = {this.state.email} 
+                onChange = {this.onChange}
+                        
+
+
+            /> 
+          )
+      }
+      
       console.log(this.props.auth.id);
       if(this.props.auth.id != ""){
         this.props.history.push('/profile/' + this.props.auth.id);
@@ -126,17 +165,11 @@ class Login extends Component {
                 <div className = "col-md-8  m-auto">
                     <form  onSubmit = {this.onSubmit}>
                     
-                        <TextFieldGroup 
-                            placeholder = "email"
-                            name = "email"
-                            value = {this.state.email}
-                            onChange = {this.onChange}
-                            
-                            info = "email"
-                            autoComplete = "off"
-                            
-                        />
                         
+                        {emailInput} 
+
+                        {emailErrors}
+
                         <input 
 
                             autoComplete = "new-password"

@@ -53,7 +53,7 @@ class EditPerson extends Component {
         
         //console.log(this.props.interests, "interests here");
         const profileData = {
-            name: this.state.name,
+            name: this.props.currName,
             sex: this.state.sex,
             age: this.state.age,
             city: this.state.city,
@@ -62,10 +62,11 @@ class EditPerson extends Component {
             interests: this.state.interests,
             bio: this.state.bio
         }
-        profileData.name = this.props.current.name;
-        console.log(profileData.name);
+        //profileData.name = this.props.current.name;
+        //console.log(profileData.name);
         //console.log("what about here");
         this.props.updateProfile(profileData);
+        this.props.history.push("/profile/" + this.props.profile.id);
     }
 
     getDataFromChild = (dataFromChild) => {

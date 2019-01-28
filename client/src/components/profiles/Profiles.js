@@ -8,6 +8,7 @@ import ProfileInterests from "./ProfileInterests";
 import EditPerson from "../edit-person/EditPerson";
 import Friends from "./Friends";
 import Queries from "./Queries";
+import "./ItemStyles.css";
 class Profiles extends Component {
     
     constructor(props) {

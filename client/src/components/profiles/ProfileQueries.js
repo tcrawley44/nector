@@ -23,7 +23,7 @@ class ProfileQueries extends Component {
         let display; 
 
         if(displayChildren){
-            let profileItems = this.props.profile.profile.people[this.props.auth.id].queries[0].results.map(profile => (
+            let profileItems = this.props.current1.results.map(profile => (
                                 
                 <div className = "btn  btn-info mt-2 " >
                    
@@ -41,13 +41,13 @@ class ProfileQueries extends Component {
                 </div>
             )
         }
-        console.log(this.props.profile.profile.people[0].queries);
+        //console.log(this.props.profile.profile.people[0].queries);
         return (
             <div>
                 <div className = "btn btn-info" onClick ={() => {
                     this.setState(prevState => ({
                     displayChildren: !prevState.displayChildren
-                    }))}}> {this.props.profile.profile.people[this.props.auth.id].queries[0].name}</div>
+                    }))}}> {this.props.current1.name}</div>
                     <div className = "  mb-2 ml-3">
                     {display}</div>
             </div>

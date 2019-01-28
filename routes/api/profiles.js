@@ -206,7 +206,7 @@ router.post('/search', (req,res) => {
         res.json(matches);
         let currentUserId = req.body.currentUserId; 
         console.log("current user id: ", currentUserId);
-        j.people[currentUserId]["queries"] = [{name:"test", results: matches}];
+        j.people[currentUserId]["queries"].push({name:req.body.queryName, results: matches});
         const sj = JSON.stringify(j);
          //save it back
         fs.writeFile('People.txt', sj, (err) => {  
@@ -225,6 +225,7 @@ router.post('/search', (req,res) => {
 router.post('/searchByName', (req,res) => {
     console.log('its here');
     fs.readFile("People.txt", (err,data) => {
+        //search for the person by name
         if (err) {
             return console.error(err);
         }
@@ -245,8 +246,21 @@ router.post('/searchByName', (req,res) => {
             
             
         }
-        console.log(id);
-        console.log(req.body.email, "email here");
+        if(!found){
+            id = j.people.length
+            j.people.push({"name": req.body.name, "id": j.people.length, interests:[["Interests"]]})
+            
+            const sj = JSON.stringify(j);
+                //save it back
+                fs.writeFile('people.txt', sj, (err) => {  
+                    // throws an error, you could also catch it here
+                    if (err) throw err;
+                
+                    // success case, the file was saved
+                    console.log('saved!');
+                });
+        }
+
         fs.readFile("logins.txt", (err,data) => {
             if (err) {
                 return console.error(err);
@@ -280,7 +294,7 @@ router.post('/searchByName', (req,res) => {
                 });
         })
         
-        res.json(id);
+        res.json({id:id, existed: found});
     })
 
 });
@@ -308,7 +322,7 @@ router.post('/update', (req,res) => {
             if(j.people[i].name === req.body.name){
                 
                 found = true; 
-                
+                j.people[i].age = req.body.age; 
                 
                 //define the mergetree function
                 const mergeTrees = (parentTree, childTree) => {

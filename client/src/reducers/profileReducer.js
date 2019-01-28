@@ -9,7 +9,8 @@ const initialState = {
     groups: "",
     network: [],
     id: "",
-    matches: []
+    matches: [],
+    existed: false
 }
 
 export default function(state = initialState, action) {
@@ -55,7 +56,8 @@ export default function(state = initialState, action) {
         case GET_ID:
             return{
                 ...state,
-                id: action.payload
+                id: action.payload.id,
+                existed: action.payload.existed
             }
         case GET_MATCHES: 
             return{

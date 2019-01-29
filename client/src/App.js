@@ -55,7 +55,7 @@ class App extends Component {
             <Footer />
           </div>
         </Router> */}
-        
+        <meta name = "mobile-web-app-capable" content = "yes">
         <div className = "half bg-dark ">
             <div className = "container-fluid bg-dark m-0">
               <Router>
@@ -91,7 +91,7 @@ class App extends Component {
           
         
         
-        
+          </meta>
       </Provider>
     );
   }

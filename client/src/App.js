@@ -55,22 +55,17 @@ class App extends Component {
             <Footer />
           </div>
         </Router> */}
-        <div className = "full bg-dark">
-          
-            <div>
+        
+        <div className = "half bg-dark ">
+            <div className = "container-fluid bg-dark m-0">
               <Router>
-              <div className = "hold bg-dark">
+              
                 <div className = "row">
-                    <div className = "col-4">
-                        {/* <div className = "addPerson" >
-                            <Dashboard />
-                        </div> */}
                     
-                    </div> 
                     
-                      <div className = "col-4 ">
+                      
                           
-                      <div className = "profileContainer container">
+                      <div className = "profileContainer bg-dark container-fluid">
                         <div>
                           <Route exact path = '/' component = {Login} />
                           <Route exact path = '/profile/:id' component = {Profiles} />
@@ -81,20 +76,20 @@ class App extends Component {
 
                           
 
-                      </div>
+                      
                     
 
                     
                 </div>
-             </div>
+             
 
 
                 
               </Router>
             </div>
-            
+          </div>  
           
-        </div>
+        
         
         
       </Provider>

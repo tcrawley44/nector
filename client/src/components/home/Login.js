@@ -160,7 +160,7 @@ class Login extends Component {
           )
       }else{
           display = (
-            <div className = " row align-self-center mt-5 ">
+            <div className = " row align-self-center mt-3 ">
 
                 <div className = "col-md-8  m-auto">
                     <form  onSubmit = {this.onSubmit}>
@@ -193,7 +193,7 @@ class Login extends Component {
                     <div className = "btn btn-info btn-block mt-4" onClick ={() => {
                             this.setState(prevState => ({
                                 displaySignUp: !prevState.displaySignUp
-                            }))}}>Sign Up2
+                            }))}}>Sign Up
                     </div>  
                 </div>
             </div>
@@ -202,13 +202,13 @@ class Login extends Component {
     return (
         
                     
-                    <div>
-                        <div className = "row ">
-                            <div className = "col-sm"></div>
-                            <div className = "col-sm">
-                                <h1>Nectorr</h1>
+                    <div className = "container">
+                        <div className = "row mt-3">
+                            
+                            <div className = "col-6  m-auto  ">
+                                <h1 className = "text-light ">Nector</h1>
                             </div>
-                            <div className = "col-sm"></div>
+                            
                         </div>
                         
 

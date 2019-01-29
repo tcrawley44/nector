@@ -62,11 +62,13 @@ class EditPerson extends Component {
             interests: this.state.interests,
             bio: this.state.bio
         }
-        //profileData.name = this.props.current.name;
+        profileData.name = this.props.profile.profile.people[this.props.auth.id].name;
+        console.log(profileData.name);
         //console.log(profileData.name);
         //console.log("what about here");
+        
         this.props.updateProfile(profileData);
-        this.props.history.push("/profile/" + this.props.profile.id);
+        this.props.history.push("/profile/" + this.props.auth.id);
     }
 
     getDataFromChild = (dataFromChild) => {
@@ -150,7 +152,7 @@ class EditPerson extends Component {
        
 
         return (
-            <div className = "add-person">
+            <div className = "edit-person">
                 <div className = "container">
                     <div className = "row">
                         <div className = "col-md-8 m-auto">
@@ -251,14 +253,16 @@ EditPerson.propTypes = {
     errors: PropTypes.object.isRequired,
     test: PropTypes.func.isRequired,
     tree: PropTypes.object.isRequired,
-    interests: PropTypes.object
+    interests: PropTypes.object,
+    auth: PropTypes.object
 }
 
 const mapStateToProps = state => ({
     profile: state.profile,
     errors: state.errors,
     tree: state.tree,
-    interests: state.interests
+    interests: state.interests,
+    auth: state.auth
 });
 
 export default connect(mapStateToProps, {updateProfile, createProfile, addNode, test, getInterests})(withRouter(EditPerson));

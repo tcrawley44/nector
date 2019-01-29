@@ -87,7 +87,7 @@ class Profiles extends Component {
                 if(displayInfo){
                     info = (
                         <div className = "row">
-                            <div className = "col">
+                            <div className = "col text-light">
                                 <h4> {this.state.currentProfile.sex}</h4>
                                 <h4> {this.state.currentProfile.age}</h4>
                                 <h4> {this.state.currentProfile.city}, {this.state.currentProfile.state}</h4>
@@ -101,8 +101,8 @@ class Profiles extends Component {
                     if(displayProfile){
                         box = (
                             <div>
-                                <h1 className = " display-5 text-center">{this.state.currentProfile.name}</h1>
-                                <div className = "btn btn-info w-25" onClick ={() => {
+                                <h1 className = " display-5 text-center text-light">{this.state.currentProfile.name}</h1>
+                                <div className = "btn btn-info  " onClick ={() => {
                                     this.setState(prevState => ({
                                         displayInfo: !prevState.displayInfo
                                     }))}}>
@@ -199,9 +199,10 @@ class Profiles extends Component {
             <div >
                 
 
-                        <div className = "listScroll" >
-                            {box}
-                            
+                        <div className = "listScroll row" >
+                            <div className = "col mt-10">
+                                {box}
+                            </div>
 
                         </div>
 

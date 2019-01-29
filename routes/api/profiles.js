@@ -315,12 +315,13 @@ router.post('/update', (req,res) => {
         
         let found = false; 
         let i = 0; 
-        while(!found){
-            console.log("name from database", j.people[i].interests,"name from request", req.body.interests, "end");
+        while(!found && i<j.people.length){
+            //console.log(j.people[i].name, j.people[i].interests,"name from request", req.body.interests, "end");
 
             //search to find the person
+            console.log(j.people[i].name, req.body.name);
             if(j.people[i].name === req.body.name){
-                
+                console.log("match");
                 found = true; 
                 j.people[i].age = req.body.age; 
                 

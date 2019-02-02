@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import {GET_ID, GET_MATCHES, GET_PROFILE, GET_NETWORK, GET_GROUPS, PROFILE_LOADING, GET_ERRORS, GET_PROFILES, ADD_INTEREST, GET_INTERESTS, GET_RESULTS} from './types';
+import {SET_CURRENT_USER_ID, GET_ID, GET_MATCHES, GET_PROFILE, GET_NETWORK, GET_GROUPS, PROFILE_LOADING, GET_ERRORS, GET_PROFILES, ADD_INTEREST, GET_INTERESTS, GET_RESULTS, SET_CURRENT_USER} from './types';
 import { NativeError } from "mongoose";
 
 // get current profile
@@ -103,10 +103,19 @@ export const getFriendGroups = (current) => dispatch => {
 }
 
 export const updateProfile = (data) => dispatch => {
-
+    
     axios
         .post("/api/profiles/update",data)
-        .then(res =>  console.log("derr"))
+        .then(res => 
+            
+            dispatch({
+                type: SET_CURRENT_USER_ID,
+                payload: res.data
+            })
+            
+        )
+        
+            
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,
@@ -209,6 +218,16 @@ export const getProfiles = () => dispatch => {
         
         
 };
+
+export const deleteQuery = (profileData) => dispatch => {
+    axios 
+    .post("/api/profiles/deleteQuery", profileData)
+    .then(res => console.log("deleted query"))
+    .catch(err => dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+    }));
+}
 
 //old getprofiles from mongo
 /* dispatch(setProfileLoading());

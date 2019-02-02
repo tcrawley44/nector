@@ -19,15 +19,23 @@ class ProfileInterests extends Component {
         this.state = {
            
            name: "",
-           parentName: ""
+           parentName: "",
+           update: ""
         
         }
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.update = this.update.bind(this);
         //this.props.test();
         
     }
+      
+    update(){
+        this.props.updateParent(); 
         
+        
+    }
+
     componentDidMount(){
         this.props.getProfiles();
     }
@@ -159,9 +167,12 @@ class ProfileInterests extends Component {
                 </button> 
             )
             if(displayChildren){
+                let page; 
+                page = this.props.location.pathname[this.props.location.pathname.length - 1];
+                
                 children2 = (
-                    this.props.profile.profile.people[this.props.auth.id].queries.map((q) =>
-                        <ProfileQueries current1 = {q}/>
+                    this.props.profile.profile.people[page].queries.map((q) =>
+                        <ProfileQueries updateParent = {this.update} current1 = {q}/>
                     )
                         
                 )
@@ -216,7 +227,7 @@ class ProfileInterests extends Component {
                         >
                     </button> */}
                 </div>
-                <div className = "col nodeStack">
+                <div className = "col nodeStack ml-3 p-0">
                     {children}
                     
                 </div>

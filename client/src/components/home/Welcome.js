@@ -66,7 +66,7 @@ import PropTypes from 'prop-types';
         if(this.state.nameSubmitted && !final){
             d2 = (
               <div>
-                <p className = "ml-2 mr-2">
+                <p className = "ml-2 mr-2 text-light">
                 Nice to Meet you!
 
                 Next, Id like to know a little more about you!
@@ -95,27 +95,27 @@ import PropTypes from 'prop-types';
     if(display3 && !final){
       d2 = (
         <div className = " row mt-5 ml-2 mr-2">
-        <p className = "ml-2 mr-2">
+        <p className = "ml-2 mr-2 text-light">
         It looks like someone has already created a placeholder account for you! 
         Placeholder accounts help users keep up with their IRL friends, even before their 
         friends have created accounts!
 
     
         </p>
-        <p className = "ml-2 mr-2">
+        <p className = "ml-2 mr-2 text-light">
            Placeholder accounts may contain some info about you, including who you know, and based on what your friends know about you, 
            but you can expand or edit this information. 
 
     
         </p>
-        <p className = "ml-2 mr-2">
+        <p className = "ml-2 mr-2 text-light">
            Click below to go to your profile
 
     
         </p>
         <div className = "col">
         
-          <div className = "btn btn-info" onClick ={() => {
+          <div className = "btn btn-info " onClick ={() => {
                 this.props.history.push("/profile/" + this.props.profile.id);
           }}>Go to profile</div>
         </div>
@@ -128,9 +128,9 @@ import PropTypes from 'prop-types';
         d2 = (
           <div className = "container ">
           <div className = "row">
-            <h1 className = "welcome m-auto">Welcome</h1>  
-            <p className = "ml-2 mr-2 mt-2 ">My name is Nector, and I am here to help you connect!</p>
-            <p className = "ml-4 mr-2 ">What is your name?</p>
+            <h1 className = "welcome m-auto text-light">Welcome</h1>  
+            <p className = "ml-2 mr-2 mt-2 text-light">My name is Nector, and I am here to help you connect!</p>
+            <p className = "ml-4 mr-2 text-light">What is your name?</p>
 
             <form  className = "m-auto" onSubmit = {this.onSubmit}>
               <input 

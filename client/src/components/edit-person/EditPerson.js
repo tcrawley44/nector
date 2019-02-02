@@ -14,13 +14,13 @@ import "./EditPersonStyles.css";
 
 
 class EditPerson extends Component {
-
+    
     constructor(props) {
         super(props);
         this.state = {
            
             name: "",
-            sex: "",
+            sex: "M",
             age: "",
             
             city: "",
@@ -28,7 +28,8 @@ class EditPerson extends Component {
             interests: [],
             bio: "",
             errors: {},
-            derr: ""
+            derr: "",
+            newEdit: false
         }
         
         //this.props.addNode("Books", "Conceptual");
@@ -46,6 +47,8 @@ class EditPerson extends Component {
         if(nextProps.errors){
             this.setState({errors: nextProps.errors});
         }
+        
+        
     }
     onSubmit(e){
         e.preventDefault();
@@ -62,13 +65,23 @@ class EditPerson extends Component {
             interests: this.state.interests,
             bio: this.state.bio
         }
-        profileData.name = this.props.profile.profile.people[this.props.auth.id].name;
+        console.log(profileData.interests, "interests");
+        if(this.props.auth.id != ""){
+            profileData.name = this.props.profile.profile.people[this.props.auth.id].name;
+        }else{
+            profileData.name = this.props.currName;
+            this.state.newEdit = true; 
+        }
+
+        
         console.log(profileData.name);
         //console.log(profileData.name);
         //console.log("what about here");
         
         this.props.updateProfile(profileData);
-        this.props.history.push("/profile/" + this.props.auth.id);
+        
+        
+        
     }
 
     getDataFromChild = (dataFromChild) => {
@@ -134,7 +147,11 @@ class EditPerson extends Component {
 
     render() {
         const {errors} = this.state; 
-        
+
+        if(this.state.newEdit && this.props.auth.id != ""){
+            this.props.history.push("/profile/" + this.props.auth.id);
+        }
+
         const {tree} = this.props; 
         //console.log(tree);
         //console.log("here2");
@@ -156,11 +173,11 @@ class EditPerson extends Component {
                 <div className = "container">
                     <div className = "row">
                         <div className = "col-md-8 m-auto">
-                            <h1 className = "display-4 text-center">Edit Person</h1>
-                            <p className = "lead text-center">
+                            <h1 className = "display-4 text-center text-white">Edit Person</h1>
+                            <p className = "lead text-center text-white">
                                 enter info
                             </p>
-                            <small className = "d-block pb-3">* = required fields</small>
+                            <small className = "d-block pb-3 text-white">* = required fields</small>
 
                             <form  onSubmit = {this.onSubmit}>
                                
@@ -233,7 +250,7 @@ class EditPerson extends Component {
                         <div className = "col">
                              <br />
                             
-                            <h1 className = "display-4 text-center">Interests</h1>
+                            <h1 className = "display-4 text-center text-white">Interests</h1>
                             
                             <Interests updateParent = {this.getUpdateFromChild} sendDataToParent = {this.getDataFromChild} tree2 = {tree.tree} />
                              

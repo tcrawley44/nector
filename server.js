@@ -48,7 +48,49 @@ function addIds () {
     })
     
 }
+function addQueries () {
+    fs.readFile("People.txt", (err,data) => {
+        if (err) {
+            return console.error(err);
+        }
+        const str = data.toString();
+        const j = JSON.parse(str);
 
+
+        let i = 0; 
+        
+        while(i < j.people.length){
+            if((!j.people[i].hasOwnProperty("queries"))){
+                j.people[i]["queries"] = []
+                console.log(i);
+            }
+            
+            i = i + 1; 
+        }
+        
+
+        
+        const sj = JSON.stringify(j);
+        fs.writeFile('People.txt', sj, (err) => {  
+            // throws an error, you could also catch it here
+            if (err) throw err;
+        
+            // success case, the file was saved
+            console.log('saved!');
+        });
+        fs.writeFile('personbackup2.txt', sj, (err) => {  
+            // throws an error, you could also catch it here
+            if (err) throw err;
+        
+            // success case, the file was saved
+            console.log('saved!');
+        });
+            
+    })
+    
+}
+
+addQueries();
 addIds();
 
 }

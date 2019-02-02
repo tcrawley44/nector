@@ -171,15 +171,15 @@ class SearchPeople extends Component {
             )
         }else{
             display = (
-                <div className = "add-person">
+                <div className = "edit-person">
                     <div className = "container">
                         <div className = "row">
                             <div className = "col-md-8 m-auto">
-                                <h1 className = "display-5 text-center">Search People</h1>
-                                <p className = "lead text-center">
+                                <h1 className = "display-5 text-center text-white">Search People</h1>
+                                <p className = "lead text-center text-white">
                                     enter info
                                 </p>
-                                <small className = "d-block pb-3">leave blank if irrelevant</small>
+                                <small className = "d-block pb-3 text-white">leave blank if irrelevant</small>
 
                                 <form  onSubmit = {this.onSubmit}>
                                 
@@ -256,7 +256,7 @@ class SearchPeople extends Component {
                             <div className = "col">
                                 <br />
                                 
-                                <h1 className = "display-5 text-center">Interests</h1>
+                                <h1 className = "display-5 text-center text-white">Interests</h1>
                                 
                                 <Interests sendDataToParent = {this.getDataFromChild} tree2 = {tree.tree} />
                                 

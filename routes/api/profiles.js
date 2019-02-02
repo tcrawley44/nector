@@ -33,25 +33,6 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 
 
 
-// old get all from mongo
-/* router.get('/all', (req,res) => {
-    const errors = {};
-    Profile.find()
-    .populate('user','name')
-    .then(profiles => {
-        if(!profiles) {
-            errors.noprofile = 'there are no profiles'
-            return res.status(404).json();
-        }
-
-        res.json(profiles);
-    
-    })
-    .catch(err =>
-        res.status(404).json({profile: 'there are no profiles'})    
-    )
-
-}); */
 
 router.get('/all', (req,res) => {
 
@@ -157,6 +138,64 @@ router.post('/getFriendGroups', (req,res) => {
 
 });
 
+router.post('/deleteQuery', (req,res) => {
+    
+    fs.readFile("People.txt", (err,data) => {
+        if (err) {
+            return console.error(err);
+        }
+        const str = data.toString();
+        const j = JSON.parse(str);
+
+
+        
+        let found = false; 
+        let i = 0; 
+        console.log("delete running");
+        console.log(req.body.id);
+        while(!found && (i<j.people.length)){
+            
+            if(j.people[i].id === req.body.id){
+                found = true; 
+                console.log("found2",i);
+            }else{
+                i = i + 1; 
+            }
+        }
+
+        if(found){
+            let found2 = false; 
+            let i2 = 0; 
+            while(!found2 && i2<j.people[i].queries.length){
+                console.log(j.people[i].queries[i2].name, req.body.query);
+                if(j.people[i].queries[i2].name === req.body.query){
+                    j.people[i].queries.splice(i2,1);
+                    console.log("made it here");
+                    found2 = true; 
+                }
+                else{
+                    i2 = i2 + 1;
+                }
+            }
+        }
+
+        const sj = JSON.stringify(j);
+        //save it back
+        fs.writeFile('People.txt', sj, (err) => {  
+            // throws an error, you could also catch it here
+            if (err) throw err;
+        
+            // success case, the file was saved
+            console.log('saved!');
+        });       
+
+        
+        
+            
+    })
+
+});
+
 router.post('/search', (req,res) => {
     console.log("made it here?")
     fs.readFile("People.txt", (err,data) => {
@@ -167,25 +206,26 @@ router.post('/search', (req,res) => {
         const j = JSON.parse(str);
         let matches = [];
         
-        //looks in master tree for node. 
+        //define function that looks in master tree for node. 
         const searchTree = (parentTree, childTree) => {
             
             let found1= false; 
-            i2 = 1; 
+            let i2 = 1; 
             while(i2 < parentTree.length && !found1){
                 if(parentTree[i2][0] === childTree[0]){
                     if(childTree.length>1 && parentTree.length>1){
                         searchTree(parentTree[i2], childTree[1]);
                     }else{
                         found1 = true; 
-                        matches.push(j.people[i].name);
+                        matches.push(j.people[i]);
                     }
                 }
                 i2 = i2+1; 
             }
 
         }
-        //iterate through profiles
+
+        //iterate through profiles based on interests
         console.log(req.body.interests,"body interests");
         let i = 0; 
         while((i<j.people.length)){
@@ -199,14 +239,39 @@ router.post('/search', (req,res) => {
             i = i + 1;
         }
 
+        let matches2 = []    
+        //gender check
+        if((req.body.sex === "M") || (req.body.sex === "F") ){
+
         
+            
+            let i3 = 0; 
+            while((i3<matches.length)){
+                
+                if(matches[i3].hasOwnProperty('sex')){
+                    if(matches[i3]["sex"] === req.body.sex){
+                        matches2.push(matches[i3].name);
+                    }
+                }
+                
+                
+
+
+                
+                i3 = i3 + 1;
+            }
+        }else{
+            for(let i4 = 0; i4 < matches.length; i4++){
+                matches2.push(matches[i4].name);
+            }
+        }
         
 
-        console.log(matches, "matches");
-        res.json(matches);
+        console.log(matches2, "matches");
+        res.json(matches2);
         let currentUserId = req.body.currentUserId; 
         console.log("current user id: ", currentUserId);
-        j.people[currentUserId]["queries"].push({name:req.body.queryName, results: matches});
+        j.people[currentUserId]["queries"].push({name:req.body.queryName, results: matches2});
         const sj = JSON.stringify(j);
          //save it back
         fs.writeFile('People.txt', sj, (err) => {  
@@ -324,7 +389,11 @@ router.post('/update', (req,res) => {
                 console.log("match");
                 found = true; 
                 j.people[i].age = req.body.age; 
-                
+                j.people[i].sex = req.body.sex; 
+                j.people[i].city = req.body.city;
+                j.people[i].state = req.body.state; 
+                j.people[i].interests = req.body.interests;
+                j.people[i].queries = [];
                 //define the mergetree function
                 const mergeTrees = (parentTree, childTree) => {
 
@@ -379,6 +448,9 @@ router.post('/update', (req,res) => {
                     
                 }
 
+
+                let finalId = j.people[i].id;
+
                 const sj = JSON.stringify(j);
                 //save it back
                 fs.writeFile('People.txt', sj, (err) => {  
@@ -388,6 +460,8 @@ router.post('/update', (req,res) => {
                     // success case, the file was saved
                     console.log('saved!');
                 });
+                console.log(finalId, "finid");
+                res.json(finalId);
             }
             i = i + 1; 
             
@@ -497,6 +571,8 @@ router.post(
     }
     
 );
+
+
 
 // @route   POST api/profile/txt
 // @desc    create or edit user profile

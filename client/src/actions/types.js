@@ -17,3 +17,4 @@ export const GET_NETWORK = "GET_NETWORK";
 export const GET_USER_ID = "GET_USER_ID";
 export const GET_ID = "GET_ID";
 export const GET_MATCHES = "GET_MATCHES";
+export const SET_CURRENT_USER_ID = "SET_CURRENT_USER_ID";

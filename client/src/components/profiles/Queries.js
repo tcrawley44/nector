@@ -1,18 +1,24 @@
 import React, { Component } from 'react'
 import SearchPeople from "../search-people/SearchPeople";
 
+// this class defines the behavior of the queries button in profile
+
 class Queries extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
            
-           currentProfile: ""
-        
+           currentProfile: "",
+
+            update: ""
         }
         
         
     }
+
+    
+
     render() {
         const {displayGroups, displaySearch} = this.state; 
         let display; 

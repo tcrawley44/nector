@@ -1,4 +1,4 @@
-import {GET_MATCHES, GET_ID, GET_PROFILE, GET_NETWORK, GET_RESULTS, GET_PROFILES, PROFILE_LOADING, ADD_INTEREST, GET_INTERESTS, GET_GROUPS} from '../actions/types';
+import { GET_MATCHES, GET_ID, GET_PROFILE, GET_NETWORK, GET_RESULTS, GET_PROFILES, PROFILE_LOADING, ADD_INTEREST, GET_INTERESTS, GET_GROUPS} from '../actions/types';
 
 
 const initialState = {
@@ -64,6 +64,7 @@ export default function(state = initialState, action) {
                 ...state,
                 matches: action.payload
             }
+        
         default: 
             return state; 
     }

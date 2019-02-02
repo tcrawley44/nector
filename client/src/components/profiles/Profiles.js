@@ -21,6 +21,13 @@ class Profiles extends Component {
         
         
     }
+
+    update(){
+        this.setState(prevState => ({
+            displayNetwork: !prevState.displayNetwork
+        }))
+    }
+
     componentDidMount(){
         this.props.getProfiles();
         this.props.getNetwork();
@@ -59,7 +66,7 @@ class Profiles extends Component {
                     <Queries current = {this.state.currentProfile.name}/>
                 </div>  */
                 
-                <ProfileInterests tree2 = {network}/>           
+                <ProfileInterests updateParent = {this.update} tree2 = {network}/>           
                                    
             )
                
@@ -136,7 +143,7 @@ class Profiles extends Component {
                                     </div>
                                     {more}
                                 </div>
-                                {ints}<div className = "mt-2 w-25">
+                                {ints}<div className = "mt-2 ">
                                     <ProfileInterests tree2 = {network}/>    
                                 </div>
                                 
@@ -215,11 +222,13 @@ class Profiles extends Component {
 Profiles.propTypes = {
     getProfiles: PropTypes.func.isRequired,
     profile: PropTypes.object.isRequired,
-    network: PropTypes.object
+    network: PropTypes.object,
+    auth: PropTypes.object
 }
 
 const mapStateToProps = state => ({
     profile: state.profile,
-    network: state.network
+    network: state.network,
+    auth: state.auth
 })
 export default connect(mapStateToProps, {getProfiles, getNetwork})(Profiles);

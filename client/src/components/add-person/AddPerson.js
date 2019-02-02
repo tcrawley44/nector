@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
-import {withRouter} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 import PropTypes from 'prop-types';
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
@@ -64,6 +64,7 @@ class AddPerson extends Component {
         }
         console.log(profileData.interests);
         this.props.createProfile(profileData, this.props.history);
+        this.props.history.push("/profile/" + this.props.auth.id);
     }
     
     getDataFromChild = (dataFromChild) => {
@@ -219,13 +220,15 @@ class AddPerson extends Component {
         return (
             <div className = "add-person">
                 <div className = "container">
+                    <Link to = {"/profile/" + this.props.auth.id} className = 'btn btn-info'>Back</Link>
                     <div className = "row">
+                        
                         <div className = "col-md-8 m-auto">
-                            <h1 className = "display-4 text-center">Add Person</h1>
-                            <p className = "lead text-center">
+                            <h1 className = "display-4 text-center text-light">Add Person</h1>
+                            <p className = "lead text-center text-light">
                                 enter info
                             </p>
-                            <small className = "d-block pb-3">* = required fields</small>
+                            <small className = "d-block pb-3 text-light">* = required fields</small>
 
                             <form  onSubmit = {this.onSubmit}>
                                
@@ -299,7 +302,7 @@ class AddPerson extends Component {
                         <div className = "col">
                              <br />
                             
-                            <h1 className = "display-4 text-center">Interests</h1>
+                            <h1 className = "display-4 text-center text-light">Interests</h1>
                             
                             <Interests updateParent = {this.getUpdateFromChild} sendDataToParent = {this.getDataFromChild} tree2 = {tree.tree} />
                              
@@ -319,14 +322,16 @@ AddPerson.propTypes = {
     errors: PropTypes.object.isRequired,
     test: PropTypes.func.isRequired,
     tree: PropTypes.object.isRequired,
-    interests: PropTypes.object
+    interests: PropTypes.object,
+    auth: PropTypes.object
 }
 
 const mapStateToProps = state => ({
     profile: state.profile,
     errors: state.errors,
     tree: state.tree,
-    interests: state.interests
+    interests: state.interests,
+    auth: state.auth
 });
 
 export default connect(mapStateToProps, {createProfile, addNode, test, getInterests})(withRouter(AddPerson));

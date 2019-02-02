@@ -10,7 +10,7 @@ import SearchPeople from './components/search-people/SearchPeople';
 import Login from './components/home/Login';
 import Welcome from "./components/home/Welcome";
 import Home from "./components/home/Home";
-
+import AddPerson from "./components/add-person/AddPerson";
 import './App.css';
 
 //check for token
@@ -57,7 +57,7 @@ class App extends Component {
         </Router> */}
         
         <div className = "half bg-dark ">
-        <meta name = "mobile-web-app-capable" content = "yes"></meta>
+          <meta name = "mobile-web-app-capable" content = "yes"></meta>
             <div className = "container-fluid bg-dark m-0">
               <Router>
               
@@ -72,6 +72,7 @@ class App extends Component {
                           <Route exact path = '/profile/:id' component = {Profiles} />
                           <Route exact path = '/search-person' component = {SearchPeople} />
                           <Route exact path = '/welcome' component = {Welcome} />
+                          <Route exact path = '/add-person' component = {AddPerson} />
                         </div>
                       </div>    
 

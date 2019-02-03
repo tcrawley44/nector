@@ -4,12 +4,13 @@ import {withRouter} from "react-router-dom";
 import PropTypes from 'prop-types';
 import "../add-person/AddPersonStyles.css";
 import "./ItemStyles.css";
-import TextFieldGroup from "../common/TextFieldGroup";
+
 import {addNode,getNodes} from "../../actions/nodeActions";
 import {getTree,test} from "../../actions/treeactions";
 import {addInterest, getInterests, getProfiles} from "../../actions/profileActions";
 import {Link} from 'react-router-dom';
 import ProfileQueries from "./ProfileQueries";
+import SearchChild from "./SearchChild";
 
 class ProfileInterests extends Component {
 
@@ -153,6 +154,24 @@ class ProfileInterests extends Component {
             }
             
             break; 
+        case "Search":
+            butt = (
+                <div  className="btn  btn-info  ml-2" onClick ={() => {
+                    this.setState(prevState => ({
+                        displayChildren: !prevState.displayChildren
+                    }))
+                    
+                    
+                }}>Search</div>
+            )
+            if(displayChildren){
+                children = (
+                    <SearchChild /> 
+                )
+                
+            }
+            
+        break;
         case "Queries":
             butt = (
                 <button type = "button" id = "foo" ref = "foob" className = "btn btn-info  ml-2 " onClick ={() => {

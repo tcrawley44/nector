@@ -24,7 +24,7 @@ router.post('/register', (req, res) => {
                 console.log(cryptPass, "crypt after");
                 let name2 = {email:req.body.email,password:cryptPass};
                 j.push(name2);
-
+                
                 
                 const sj = JSON.stringify(j);
                 fs.writeFile('logins.txt', sj, (err) => {  
@@ -83,6 +83,7 @@ router.post('/login', (req, res) => {
         if(found){
             console.log("made it here");
             console.log(j[i].id, "id");
+            
             res.json(j[i].id);
         }else{
             res.status(404)

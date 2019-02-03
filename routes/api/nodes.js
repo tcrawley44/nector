@@ -65,6 +65,8 @@ router.post(
                 // success case, the file was saved
                 console.log('saved!');
             });
+
+            res.json({"complete":"complete"});
         })           
             
             

@@ -62,7 +62,7 @@ class SearchPeople extends Component {
             age: this.state.age,
             city: this.state.city,
             state: this.state.state, 
-            currentUserId: this.props.auth.id,
+            currentUserId: localStorage.user,
             interests: this.state.interests,
             bio: this.state.bio
         }

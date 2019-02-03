@@ -1,1 +1,1 @@
-["Network",["Connections",["Add"],["Queries",["New Query"]]]]
+["Network",["Connections",["Add"],["Search"],["Queries",["New Query"]]]]

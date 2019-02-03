@@ -63,7 +63,7 @@ export const createProfile = (profileData, history) => dispatch => {
     console.log("is this working");
     axios
         .post("/api/profiles/txt",profileData)
-        .then(res =>  console.log("derr"))
+        .then(res =>  history.push("/profile/"+ res.data))
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,

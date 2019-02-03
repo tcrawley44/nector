@@ -66,8 +66,8 @@ class EditPerson extends Component {
             bio: this.state.bio
         }
         console.log(profileData.interests, "interests");
-        if(this.props.auth.id != ""){
-            profileData.name = this.props.profile.profile.people[this.props.auth.id].name;
+        if(localStorage.user != ""){
+            profileData.name = this.props.profile.profile.people[localStorage.user].name
         }else{
             profileData.name = this.props.currName;
             this.state.newEdit = true; 

@@ -1,8 +1,9 @@
-import {GET_NODE} from '../actions/types';
+import {GET_NODE, IS_UPDATED} from '../actions/types';
 
 
 const initialState = {
-    node: null
+    node: null,
+    isUpdated: false
 }
 
 export default function( state = initialState, action) {
@@ -11,6 +12,11 @@ export default function( state = initialState, action) {
             return{
                 ...state,
                 node: action.payload
+            }
+        case IS_UPDATED:
+            return{
+                ...state,
+                isUpdated: true
             }
         
         default: 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import { Provider} from 'react-redux';
 import store from './store';
 import jwt_decode from 'jwt-decode';
@@ -11,6 +12,7 @@ import Login from './components/home/Login';
 import Welcome from "./components/home/Welcome";
 import Home from "./components/home/Home";
 import AddPerson from "./components/add-person/AddPerson";
+import EditPerson from "./components/edit-person/EditPerson";
 import './App.css';
 
 //check for token
@@ -25,7 +27,9 @@ if(localStorage.jwtToken) {
 }
 
 class App extends Component {
+  
   render() {
+    
     return (
       <Provider store = {store}>
         {/* <Router>
@@ -60,30 +64,32 @@ class App extends Component {
           <meta name = "mobile-web-app-capable" content = "yes"></meta>
             <div className = "container-fluid bg-dark m-0">
               <Router>
-              
-                <div className = "row">
-                    
-                    
+                <div>
+                <Link to = {"/profile/" + localStorage.user } className = "btn btn-info mt-2">Home</Link>
+                  <div className = "row">
                       
-                          
-                      <div className = "profileContainer bg-dark container-fluid">
-                        <div>
-                          <Route exact path = '/' component = {Login} />
-                          <Route exact path = '/profile/:id' component = {Profiles} />
-                          <Route exact path = '/search-person' component = {SearchPeople} />
-                          <Route exact path = '/welcome' component = {Welcome} />
-                          <Route exact path = '/add-person' component = {AddPerson} />
-                        </div>
-                      </div>    
+                      
+                        
+                        
+                        <div className = "profileContainer bg-dark container-fluid">
+                          <div>
+                            <Route exact path = '/' component = {Login} />
+                            <Route exact path = '/profile/:id' component = {Profiles} />
+                            <Route exact path = '/search-person' component = {SearchPeople} />
+                            <Route exact path = '/welcome' component = {Welcome} />
+                            <Route exact path = '/add-person' component = {AddPerson} />
+                            <Route exact path = '/edit-person/:id' component = {EditPerson} />
+                          </div>
+                        </div>    
 
-                          
+                            
+
+                        
+                      
 
                       
-                    
-
-                    
+                  </div>
                 </div>
-             
 
 
                 

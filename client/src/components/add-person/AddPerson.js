@@ -64,7 +64,7 @@ class AddPerson extends Component {
         }
         console.log(profileData.interests);
         this.props.createProfile(profileData, this.props.history);
-        this.props.history.push("/profile/" + this.props.auth.id);
+        //this.props.history.push("/profile/" + this.props.profile.profile.people.length);
     }
     
     getDataFromChild = (dataFromChild) => {

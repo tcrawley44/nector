@@ -44,7 +44,8 @@ class Interests extends Component {
         
         this.props.addNode(data.name, this.state.parentName);
         
-        this.props.updateParent();
+        let node2 = {name: data.name, children: []}
+        this.props.tree2.children.push(node2);
     }
 
     
@@ -67,7 +68,8 @@ class Interests extends Component {
     }
    
     getUpdateFromChild = () => {
-        this.props.updateParent();
+        //let node = {name: data, children: []}
+        //this.props.tree2.children.push(node);
     }
 
     render() {
@@ -90,7 +92,7 @@ class Interests extends Component {
                 <div className = "nodeContainer">
                 {listItems}
                 
-                <form  className ="newChild" onSubmit = {this.onSubmit}>
+                    <form  className ="newChild" onSubmit = {this.onSubmit}>
                         <div className = "row derp"> 
                             <input
                     
@@ -163,14 +165,19 @@ Interests.propTypes = {
     //test: PropTypes.func.isRequired 
     //addNode: PropTypes.func
     //errors: PropTypes.object.isRequired
-    interests: PropTypes.object
+    addNode: PropTypes.func,
+    interests: PropTypes.object,
+    node: PropTypes.node,
+    tree: PropTypes.object
 }
 
 const mapStateToProps = state => ({
     //node: state.node
     //tree: state.tree
     //errors: state.errors
-    interests: state.interests
+    interests: state.interests,
+    node: state.node,
+    tree: state.tree
 })
 
 const InterestPort = connect(mapStateToProps, {addNode, getNodes, getTree, test, addInterest, getInterests})(withRouter(Interests));

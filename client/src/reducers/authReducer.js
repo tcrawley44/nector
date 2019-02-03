@@ -19,9 +19,11 @@ export default function(state = initialState, action) {
                 user: action.payload
             };
         case GET_USER_ID:
+            localStorage.user = action.payload;
             return{
                 ...state,
                 id: action.payload
+                
             }
         case SET_CURRENT_USER_ID:
             return{

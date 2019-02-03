@@ -204,9 +204,13 @@ router.post('/search', (req,res) => {
         }
         const str = data.toString();
         const j = JSON.parse(str);
-        let matches = [];
+
+
+
+        
         
         //define function that looks in master tree for node. 
+        let matches = [];
         const searchTree = (parentTree, childTree) => {
             
             let found1= false; 
@@ -225,6 +229,7 @@ router.post('/search', (req,res) => {
 
         }
 
+
         //iterate through profiles based on interests
         console.log(req.body.interests,"body interests");
         let i = 0; 
@@ -238,6 +243,7 @@ router.post('/search', (req,res) => {
             
             i = i + 1;
         }
+
 
         let matches2 = []    
         //gender check
@@ -266,7 +272,7 @@ router.post('/search', (req,res) => {
             }
         }
         
-
+        //save and write
         console.log(matches2, "matches");
         res.json(matches2);
         let currentUserId = req.body.currentUserId; 
@@ -347,6 +353,7 @@ router.post('/searchByName', (req,res) => {
                 
             }
             k[i2]["id"] = id;
+            localStorage.user = id; 
 
             const sj = JSON.stringify(k);
                 //save it back
@@ -388,56 +395,77 @@ router.post('/update', (req,res) => {
             if(j.people[i].name === req.body.name){
                 console.log("match");
                 found = true; 
-                j.people[i].age = req.body.age; 
-                j.people[i].sex = req.body.sex; 
-                j.people[i].city = req.body.city;
-                j.people[i].state = req.body.state; 
-                j.people[i].interests = req.body.interests;
+                if(!j.people[i].hasOwnProperty("age")){
+                    j.people[i].age = req.body.age; 
+                }
+                if(!j.people[i].hasOwnProperty("sex")){
+                    j.people[i].sex = req.body.sex;
+                }
+                if(!j.people[i].hasOwnProperty("city")){
+                    j.people[i].city = req.body.city;
+                }
+                if(!j.people[i].hasOwnProperty("state")){
+                    j.people[i].state = req.body.state; 
+                }
+                
+                 
+                
+                
+                
                 j.people[i].queries = [];
                 //define the mergetree function
                 const mergeTrees = (parentTree, childTree) => {
 
-                    let found = false; 
-                    let searchedAllChildren = false; 
-                    let i = 1; 
-                    let atTheEnd = false; 
-
-                    //check if at the end of a tree
-                    if(childTree[1] === undefined || parentTree[i] === undefined){
-                        atTheEnd = true; 
-                        
-                    }
-
-                    //search children at that level
-                    while(!found && !searchedAllChildren && !atTheEnd){
-                        
-                        if(childTree[1][0] === parentTree[i][0]){
-                            found = true; 
-                        }
-                        //conditional iteration
-                        if((parentTree.length != 1)&&(i != (parentTree.length-1))&&(!found)){
-                            i = i + 1; 
-                        }else{
-                            searchedAllChildren = true; 
-                        }
-        
-                    }
-                    if((atTheEnd)&&(childTree[0]==parentTree[0])){
-
-                    }else{
-                        if(found){
-                        
-                            mergeTrees(parentTree[i],childTree[1]);
-                        }else{
-                                for(let k = 1; k < childTree.length; k++){
-                                    parentTree.push(childTree[k]);
-                                }
-                                
-                            
-                            
-                        }        
-                    }
                     
+                    
+                    
+                    
+                    console.log("childtree length", childTree.length);
+                    //for each child at the current level of child tree
+                    for(let i2 = 1; i2 < childTree.length; i2++){
+                        let found = false; 
+                        let i = 1; 
+                        let searchedAllChildren = false; 
+                        let atTheEnd = false; 
+                        console.log(parentTree, childTree);
+                        //check if at the end of a tree
+                        if(childTree[1] === undefined || parentTree[i] === undefined){
+                            atTheEnd = true; 
+                            
+                        }
+                        console.log(childTree[i2][0], "child 1 0");
+                        //search children of parent tree at that level
+                        while(!found && !searchedAllChildren && !atTheEnd){
+                            
+                            //check for a match 
+                            if(childTree[i2][0] === parentTree[i][0]){
+                                found = true; 
+                            }
+                            //conditional iteration
+                            if((parentTree.length != 1)&&(i != (parentTree.length-1))&&(!found)){
+                                i = i + 1; 
+                            }else{
+                                searchedAllChildren = true; 
+                            }
+            
+                        }
+                        if((atTheEnd)&&(childTree[0]==parentTree[0])){
+                            parentTree.push(childTree[i2]);
+                        }else{
+                            if(found){
+                                //if there was a match, then send the next layer of both trees down
+                                mergeTrees(parentTree[i],childTree[i2]);
+                            }else{//otherwise append the childtree node onto the parent tree
+                                    /*for(let k = 1; k < childTree.length; k++){
+                                        parentTree.push(childTree[k]);
+                                    }*/
+                                    parentTree.push(childTree[i2]);
+                                    
+                                
+                                
+                            }        
+                        }
+                    }
                 }
                 
                 //if interest tree is blank then push the child tree
@@ -592,14 +620,14 @@ router.post(
         if(req.body.city) profileFields.city = req.body.city;
         if(req.body.state) profileFields.state = req.body.state;
         if(req.body.interests) profileFields.interests = req.body.interests; 
-
+        
         fs.readFile("People.txt", (err,data) => {
             if (err) {
                 return console.error(err);
             }
             const str = data.toString();
             const j = JSON.parse(str);
-
+            profileFields.id = j.people.length; 
             j.people.push(profileFields);
             const sj = JSON.stringify(j);
 
@@ -611,7 +639,7 @@ router.post(
                 console.log('saved!');
             });
         })
-        
+        res.json(profileFields.id);
 
     }
     

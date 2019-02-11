@@ -85,7 +85,7 @@ class Profiles extends Component {
                             Back
                             
                         </div>
-                        <EditPerson current = {this.state.currentProfile}/>
+                        <EditPerson currName = {this.state.currentProfile.name}/>
                     </div>
                 )
             }else{

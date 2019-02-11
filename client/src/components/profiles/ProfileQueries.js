@@ -20,7 +20,7 @@ class ProfileQueries extends Component {
 
     deleteQuery(profileData) {
         this.props.deleteQuery(profileData);
-        this.props.updateParent(); 
+        //this.props.updateParent(); 
         console.log("yes");
     }
 
@@ -96,7 +96,7 @@ class ProfileQueries extends Component {
                             query: this.props.current1.name,
                             
                            
-                            id: this.props.auth.id
+                            id: localStorage.user
                             
                         }
                         this.deleteQuery(profileData);
@@ -124,9 +124,13 @@ ProfileQueries.propTypes = {
     auth: PropTypes.object
 }
 
-const mapStateToProps = state => ({
-    profile: state.profile,
-    auth: state.auth
-})
+function mapStateToProps(state){
+    return{
+        profile: state.profile,
+        auth: state.auth,
+        update: state.profile.update
+    }
+    
+}
 
 export default connect(mapStateToProps, {deleteQuery})(ProfileQueries);

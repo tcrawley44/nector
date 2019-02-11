@@ -32,7 +32,7 @@ class ProfileInterests extends Component {
     }
       
     update(){
-        this.props.updateParent(); 
+        this.state.name = this.state.name;
         
         
     }
@@ -186,11 +186,10 @@ class ProfileInterests extends Component {
                 </button> 
             )
             if(displayChildren){
-                let page; 
-                page = this.props.location.pathname[this.props.location.pathname.length - 1];
+                
                 
                 children2 = (
-                    this.props.profile.profile.people[page].queries.map((q) =>
+                    this.props.profile.profile.people[localStorage.user].queries.map((q) =>
                         <ProfileQueries updateParent = {this.update} current1 = {q}/>
                     )
                         
@@ -271,14 +270,15 @@ ProfileInterests.propTypes = {
     auth: PropTypes.object
 }
 
-const mapStateToProps = state => ({
-    //node: state.node
-    //tree: state.tree
-    //errors: state.errors
-    interests: state.interests,
-    profile: state.profile,
-    auth: state.auth
-})
+function mapStateToProps(state){
+    return{
+        interests: state.interests,
+        profile: state.profile,
+        update: state.profile.update,
+        auth: state.auth
+    }
+    
+}
 
 const ProfileInterestPort = connect(mapStateToProps, {addNode, getNodes, getTree, test, addInterest, getInterests,getProfiles})(withRouter(ProfileInterests));
 export default ProfileInterestPort;

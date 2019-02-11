@@ -20,7 +20,7 @@ class EditPerson extends Component {
         this.state = {
            
             name: "",
-            sex: "M",
+            sex: "male",
             age: "",
             
             city: "",
@@ -40,6 +40,7 @@ class EditPerson extends Component {
     
     componentDidMount(){
         this.props.test();
+        
     }
 
     componentWillReceiveProps(nextProps){
@@ -67,7 +68,7 @@ class EditPerson extends Component {
         }
         console.log(profileData.interests, "interests");
         if(localStorage.user != ""){
-            profileData.name = this.props.profile.profile.people[localStorage.user].name
+            profileData.name = this.props.currName
         }else{
             profileData.name = this.props.currName;
             this.state.newEdit = true; 
@@ -78,7 +79,7 @@ class EditPerson extends Component {
         //console.log(profileData.name);
         //console.log("what about here");
         
-        this.props.updateProfile(profileData);
+        this.props.updateProfile(profileData, this.props.history);
         
         
         

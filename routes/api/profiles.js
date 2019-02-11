@@ -189,7 +189,7 @@ router.post('/deleteQuery', (req,res) => {
             console.log('saved!');
         });       
 
-        
+        res.json({"here":"here"});
         
             
     })
@@ -204,73 +204,79 @@ router.post('/search', (req,res) => {
         }
         const str = data.toString();
         const j = JSON.parse(str);
-
-
+        let matches;
+        console.log(req.body.interests);
+        if(req.body.interests.length>0){
 
         
         
-        //define function that looks in master tree for node. 
-        let matches = [];
-        const searchTree = (parentTree, childTree) => {
             
-            let found1= false; 
-            let i2 = 1; 
-            while(i2 < parentTree.length && !found1){
-                if(parentTree[i2][0] === childTree[0]){
-                    if(childTree.length>1 && parentTree.length>1){
-                        searchTree(parentTree[i2], childTree[1]);
-                    }else{
-                        found1 = true; 
-                        matches.push(j.people[i]);
+            //define function that looks in master tree for node. 
+            matches = [];
+            const searchTree = (parentTree, childTree) => {
+                
+                let found1= false; 
+                let i2 = 1; 
+                while(i2 < parentTree.length && !found1){
+                    if(parentTree[i2][0] === childTree[0]){
+                        if(childTree.length>1 && parentTree.length>1){
+                            searchTree(parentTree[i2], childTree[1]);
+                        }else{
+                            found1 = true; 
+                            matches.push(j.people[i]);
+                        }
                     }
+                    i2 = i2+1; 
                 }
-                i2 = i2+1; 
+
             }
 
-        }
 
-
-        //iterate through profiles based on interests
-        console.log(req.body.interests,"body interests");
-        let i = 0; 
-        while((i<j.people.length)){
-            
-            
-            
-            searchTree(j.people[i].interests[0], req.body.interests[0][1]);
-
-
-            
-            i = i + 1;
-        }
-
-
-        let matches2 = []    
-        //gender check
-        if((req.body.sex === "M") || (req.body.sex === "F") ){
-
-        
-            
-            let i3 = 0; 
-            while((i3<matches.length)){
-                
-                if(matches[i3].hasOwnProperty('sex')){
-                    if(matches[i3]["sex"] === req.body.sex){
-                        matches2.push(matches[i3].name);
-                    }
-                }
+            //iterate through profiles based on interests
+            console.log(req.body.interests,"body interests");
+            let i = 0; 
+            while((i<j.people.length)){
                 
                 
+                
+                searchTree(j.people[i].interests[0], req.body.interests[0][1]);
 
 
                 
-                i3 = i3 + 1;
+                i = i + 1;
             }
         }else{
-            for(let i4 = 0; i4 < matches.length; i4++){
-                matches2.push(matches[i4].name);
-            }
+            matches = j.people;
         }
+
+        
+            let matches2 = []    
+            //gender check
+            if((req.body.sex === "male") || (req.body.sex === "female") ){
+
+            
+                
+                let i3 = 0; 
+                while((i3<matches.length)){
+                    
+                    if(matches[i3].hasOwnProperty('sex')){
+                        if(matches[i3]["sex"] === req.body.sex){
+                            matches2.push(matches[i3].name);
+                        }
+                    }
+                    
+                    
+
+
+                    
+                    i3 = i3 + 1;
+                }
+            }else{
+                for(let i4 = 0; i4 < matches.length; i4++){
+                    matches2.push(matches[i4].name);
+                }
+            }
+        
         
         //save and write
         console.log(matches2, "matches");
@@ -287,7 +293,7 @@ router.post('/search', (req,res) => {
             // success case, the file was saved
             console.log('saved!');
         });       
-
+        
     })
 
 
@@ -353,7 +359,7 @@ router.post('/searchByName', (req,res) => {
                 
             }
             k[i2]["id"] = id;
-            localStorage.user = id; 
+            
 
             const sj = JSON.stringify(k);
                 //save it back
@@ -384,7 +390,7 @@ router.post('/update', (req,res) => {
         const j = JSON.parse(str);
 
         
-        
+        //search to find the person
         let found = false; 
         let i = 0; 
         while(!found && i<j.people.length){
@@ -414,68 +420,72 @@ router.post('/update', (req,res) => {
                 
                 j.people[i].queries = [];
                 //define the mergetree function
-                const mergeTrees = (parentTree, childTree) => {
+                if(req.body.interests.length>0){
 
-                    
-                    
-                    
-                    
-                    console.log("childtree length", childTree.length);
-                    //for each child at the current level of child tree
-                    for(let i2 = 1; i2 < childTree.length; i2++){
-                        let found = false; 
-                        let i = 1; 
-                        let searchedAllChildren = false; 
-                        let atTheEnd = false; 
-                        console.log(parentTree, childTree);
-                        //check if at the end of a tree
-                        if(childTree[1] === undefined || parentTree[i] === undefined){
-                            atTheEnd = true; 
-                            
-                        }
-                        console.log(childTree[i2][0], "child 1 0");
-                        //search children of parent tree at that level
-                        while(!found && !searchedAllChildren && !atTheEnd){
-                            
-                            //check for a match 
-                            if(childTree[i2][0] === parentTree[i][0]){
-                                found = true; 
+                
+                    const mergeTrees = (parentTree, childTree) => {
+
+                        
+                        
+                        
+                        
+                        console.log("childtree length", childTree.length);
+                        //for each child at the current level of child tree
+                        for(let i2 = 1; i2 < childTree.length; i2++){
+                            let found = false; 
+                            let i = 1; 
+                            let searchedAllChildren = false; 
+                            let atTheEnd = false; 
+                            console.log(parentTree, childTree);
+                            //check if at the end of a tree
+                            if(childTree[1] === undefined || parentTree[i] === undefined){
+                                atTheEnd = true; 
+                                
                             }
-                            //conditional iteration
-                            if((parentTree.length != 1)&&(i != (parentTree.length-1))&&(!found)){
-                                i = i + 1; 
+                            console.log(childTree[i2][0], "child 1 0");
+                            //search children of parent tree at that level
+                            while(!found && !searchedAllChildren && !atTheEnd){
+                                
+                                //check for a match 
+                                if(childTree[i2][0] === parentTree[i][0]){
+                                    found = true; 
+                                }
+                                //conditional iteration
+                                if((parentTree.length != 1)&&(i != (parentTree.length-1))&&(!found)){
+                                    i = i + 1; 
+                                }else{
+                                    searchedAllChildren = true; 
+                                }
+                
+                            }
+                            if((atTheEnd)&&(childTree[0]==parentTree[0])){
+                                parentTree.push(childTree[i2]);
                             }else{
-                                searchedAllChildren = true; 
-                            }
-            
-                        }
-                        if((atTheEnd)&&(childTree[0]==parentTree[0])){
-                            parentTree.push(childTree[i2]);
-                        }else{
-                            if(found){
-                                //if there was a match, then send the next layer of both trees down
-                                mergeTrees(parentTree[i],childTree[i2]);
-                            }else{//otherwise append the childtree node onto the parent tree
-                                    /*for(let k = 1; k < childTree.length; k++){
-                                        parentTree.push(childTree[k]);
-                                    }*/
-                                    parentTree.push(childTree[i2]);
+                                if(found){
+                                    //if there was a match, then send the next layer of both trees down
+                                    mergeTrees(parentTree[i],childTree[i2]);
+                                }else{//otherwise append the childtree node onto the parent tree
+                                        /*for(let k = 1; k < childTree.length; k++){
+                                            parentTree.push(childTree[k]);
+                                        }*/
+                                        parentTree.push(childTree[i2]);
+                                        
                                     
-                                
-                                
-                            }        
+                                    
+                                }        
+                            }
                         }
                     }
-                }
-                
-                //if interest tree is blank then push the child tree
-                if(j.people[i].interests === undefined){
-                    j.people[i].interests.push(req.body.interests[0]);
-                }else{//otherwise merge the trees
-                    mergeTrees(j.people[i].interests[0],req.body.interests[0])
                     
-                }
+                    //if interest tree is blank then push the child tree
+                    if(j.people[i].interests === undefined){
+                        j.people[i].interests.push(req.body.interests[0]);
+                    }else{//otherwise merge the trees
+                        mergeTrees(j.people[i].interests[0],req.body.interests[0])
+                        
+                    }
 
+                }
 
                 let finalId = j.people[i].id;
 

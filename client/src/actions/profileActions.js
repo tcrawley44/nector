@@ -1,6 +1,6 @@
 
 import axios from "axios";
-import {SET_CURRENT_USER_ID, GET_ID, GET_MATCHES, GET_PROFILE, GET_NETWORK, GET_GROUPS, PROFILE_LOADING, GET_ERRORS, GET_PROFILES, ADD_INTEREST, GET_INTERESTS, GET_RESULTS, SET_CURRENT_USER} from './types';
+import {SET_CURRENT_USER_ID, GET_ID, GET_MATCHES, GET_PROFILE, GET_NETWORK, GET_GROUPS, PROFILE_LOADING, GET_ERRORS, GET_PROFILES, ADD_INTEREST, GET_INTERESTS, GET_RESULTS, SET_CURRENT_USER, IS_UPDATED} from './types';
 import { NativeError } from "mongoose";
 
 // get current profile
@@ -102,16 +102,13 @@ export const getFriendGroups = (current) => dispatch => {
         );
 }
 
-export const updateProfile = (data) => dispatch => {
+export const updateProfile = (data,history) => dispatch => {
     
     axios
         .post("/api/profiles/update",data)
         .then(res => 
             
-            dispatch({
-                type: SET_CURRENT_USER_ID,
-                payload: res.data
-            })
+            history.push("/profile/" + res.data)
             
         )
         
@@ -222,7 +219,12 @@ export const getProfiles = () => dispatch => {
 export const deleteQuery = (profileData) => dispatch => {
     axios 
     .post("/api/profiles/deleteQuery", profileData)
-    .then(res => console.log("deleted query"))
+    .then(res => 
+        dispatch({
+            type: IS_UPDATED,
+            payload: 1
+        })    
+    )
     .catch(err => dispatch({
         type: GET_ERRORS,
         payload: err.response.data

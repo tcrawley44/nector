@@ -5,7 +5,7 @@ import jwt_decode from 'jwt-decode';
 // Register user
 export const registerUser = (userData) => dispatch => {
     axios
-        .post('/api/auth/register', userData)
+        .post('/api/auth/register2', userData)
         .then(res => 
             dispatch({
 

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const fs = require('fs');
+const serv = require('../../server');
 
 router.post('/register', (req, res) => {
     console.log("made it here");
@@ -45,21 +46,57 @@ router.post('/register', (req, res) => {
     res.json(req.body.email);
 });
 
+router.post('/register2', (req, res) => {
+    
+    const db = serv.db2;
+    const auth = db.collection("auth");
+      //auth.insert({ "foo" : "bar" })
+    auth.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0].all;
+
+        let cryptPass = req.body.password; 
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(cryptPass, salt, (err,hash) => {
+                if(err) throw err; 
+                cryptPass = hash; 
+                console.log(cryptPass, "cryptpass", hash, "hash")
+                console.log(cryptPass, "crypt after");
+                let name2 = {email:req.body.email,password:cryptPass};
+                j.push(name2);
+                
+                let sj = {all: j}
+                auth.updateOne(
+                    { }, {$set: sj}
+                    
+                ) 
+                
+                
+
+            })
+            
+        })
+        
+           
+    })
+});
+
 
 router.post('/login', (req, res) => {
 
-    fs.readFile("logins.txt", (err,data) => {
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    
 
+    const db = serv.db2;
+    const auth = db.collection("auth");
+      //auth.insert({ "foo" : "bar" })
+    auth.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0].all;
 
-        console.log(req.body.email, req.body.password);
-        //console.log(j.people.indexOf("Tyler Crawley"));
-        
-        
         let i = 0; 
         let found = false; 
         let passMatch = false; 
@@ -90,9 +127,7 @@ router.post('/login', (req, res) => {
         }
         
         
-        
-        
-            
+           
     })
 });
 

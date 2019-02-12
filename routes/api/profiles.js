@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
+const serv = require('../../server');
 const fs = require('fs');
 //load profile model
 const profile = require('../../models/Profile');
@@ -36,29 +37,39 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
 
 router.get('/all', (req,res) => {
 
-    fs.readFile("People.txt", (err,data) => {
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    
+
+    const db = serv.db2;
+    const people = db.collection("people");
+      //auth.insert({ "foo" : "bar" })
+    people.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0];
 
         res.json(j);
+        
+           
     })
-
 });
 
 router.get('/network', (req,res) => {
 
-    fs.readFile("network.txt", (err,data) => {
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    const db = serv.db2;
+    const other = db.collection("other");
+      //network.insert({ "foo" : "bar" })
+    other.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0].network;
 
         res.json(j);
+        
+           
     })
+    
 
 });
 
@@ -66,15 +77,17 @@ router.get('/network', (req,res) => {
 
 router.post('/addFriendGroup', (req,res) => {
 
-    fs.readFile("People.txt", (err,data) => {
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    
 
+    const db = serv.db2;
+    const people = db.collection("people");
+      //auth.insert({ "foo" : "bar" })
+    people.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0];
 
-        console.log(req.body.userName, req.body.friendGroupName);
         console.log(j.people.indexOf("Tyler Crawley"));
         let found = false; 
         let i = 0; 
@@ -91,27 +104,27 @@ router.post('/addFriendGroup', (req,res) => {
         j.people[i].friendGroups.push(name2);
 
         
-        const sj = JSON.stringify(j);
-        fs.writeFile('People.txt', sj, (err) => {  
-            // throws an error, you could also catch it here
-            if (err) throw err;
         
-            // success case, the file was saved
-            console.log('saved!');
-        });
+        people.updateOne(
+            { }, {$set: j}
             
+        ) 
+        
+        
+           
     })
-
 });
 
 router.post('/getFriendGroups', (req,res) => {
     console.log("chere");
-    fs.readFile("People.txt", (err,data) => {
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    const db = serv.db2;
+    const people = db.collection("people");
+      //auth.insert({ "foo" : "bar" })
+    people.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0];
 
 
         console.log("current",req.body.userName);
@@ -140,12 +153,14 @@ router.post('/getFriendGroups', (req,res) => {
 
 router.post('/deleteQuery', (req,res) => {
     
-    fs.readFile("People.txt", (err,data) => {
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    const db = serv.db2;
+    const people = db.collection("people");
+      //auth.insert({ "foo" : "bar" })
+    people.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0];
 
 
         
@@ -179,15 +194,10 @@ router.post('/deleteQuery', (req,res) => {
             }
         }
 
-        const sj = JSON.stringify(j);
-        //save it back
-        fs.writeFile('People.txt', sj, (err) => {  
-            // throws an error, you could also catch it here
-            if (err) throw err;
-        
-            // success case, the file was saved
-            console.log('saved!');
-        });       
+        people.updateOne(
+            { }, {$set: j}
+            
+        )     
 
         res.json({"here":"here"});
         
@@ -198,12 +208,14 @@ router.post('/deleteQuery', (req,res) => {
 
 router.post('/search', (req,res) => {
     console.log("made it here?")
-    fs.readFile("People.txt", (err,data) => {
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    const db = serv.db2;
+    const people = db.collection("people");
+      //auth.insert({ "foo" : "bar" })
+    people.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0];
         let matches;
         console.log(req.body.interests);
         if(req.body.interests.length>0){
@@ -284,15 +296,11 @@ router.post('/search', (req,res) => {
         let currentUserId = req.body.currentUserId; 
         console.log("current user id: ", currentUserId);
         j.people[currentUserId]["queries"].push({name:req.body.queryName, results: matches2});
-        const sj = JSON.stringify(j);
-         //save it back
-        fs.writeFile('People.txt', sj, (err) => {  
-            // throws an error, you could also catch it here
-            if (err) throw err;
-        
-            // success case, the file was saved
-            console.log('saved!');
-        });       
+
+        auth.updateOne(
+            { }, {$set: j}
+            
+        )      
         
     })
 
@@ -301,13 +309,15 @@ router.post('/search', (req,res) => {
 //search by name, return id
 router.post('/searchByName', (req,res) => {
     console.log('its here');
-    fs.readFile("People.txt", (err,data) => {
-        //search for the person by name
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    const db = serv.db2;
+    const people = db.collection("people");
+      //auth.insert({ "foo" : "bar" })
+    people.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0];
+
         console.log("body name", req.body.name)
         let id; 
         let i = 0; 
@@ -327,23 +337,20 @@ router.post('/searchByName', (req,res) => {
             id = j.people.length
             j.people.push({"name": req.body.name, "id": j.people.length, interests:[["Interests"]]})
             
-            const sj = JSON.stringify(j);
-                //save it back
-                fs.writeFile('people.txt', sj, (err) => {  
-                    // throws an error, you could also catch it here
-                    if (err) throw err;
+            people.updateOne(
+                { }, {$set: j}
                 
-                    // success case, the file was saved
-                    console.log('saved!');
-                });
+            )     
         }
 
-        fs.readFile("logins.txt", (err,data) => {
-            if (err) {
-                return console.error(err);
-            }
-            const str = data.toString();
-            const k = JSON.parse(str);
+        const auth = db.collection("auth");
+      //auth.insert({ "foo" : "bar" })
+        auth.find({}).toArray(function(err, docs) {
+            //assert.equal(err, null);
+            console.log("Found the following records");
+            console.log(docs)
+            let k = docs[0].all;
+
             let i2 = 0; 
             let found2 = false; 
             console.log(k.length);
@@ -361,15 +368,10 @@ router.post('/searchByName', (req,res) => {
             k[i2]["id"] = id;
             
 
-            const sj = JSON.stringify(k);
-                //save it back
-                fs.writeFile('logins.txt', sj, (err) => {  
-                    // throws an error, you could also catch it here
-                    if (err) throw err;
+            auth.updateOne(
+                { }, {$set: k}
                 
-                    // success case, the file was saved
-                    console.log('saved!');
-                });
+            )  
         })
         
         res.json({id:id, existed: found});
@@ -382,12 +384,14 @@ router.post('/searchByName', (req,res) => {
 //adds the new interests to current tree, i think currently it is only able to add a single node at at time. 
 router.post('/update', (req,res) => {
 
-    fs.readFile("People.txt", (err,data) => {
-        if (err) {
-            return console.error(err);
-        }
-        const str = data.toString();
-        const j = JSON.parse(str);
+    const db = serv.db2;
+    const people = db.collection("people");
+      //auth.insert({ "foo" : "bar" })
+    people.find({}).toArray(function(err, docs) {
+        //assert.equal(err, null);
+        console.log("Found the following records");
+        console.log(docs)
+        let j = docs[0];
 
         
         //search to find the person
@@ -489,15 +493,10 @@ router.post('/update', (req,res) => {
 
                 let finalId = j.people[i].id;
 
-                const sj = JSON.stringify(j);
-                //save it back
-                fs.writeFile('People.txt', sj, (err) => {  
-                    // throws an error, you could also catch it here
-                    if (err) throw err;
-                
-                    // success case, the file was saved
-                    console.log('saved!');
-                });
+                people.updateOne(
+                    { }, {$set: j}
+                    
+                )  
                 console.log(finalId, "finid");
                 res.json(finalId);
             }
@@ -512,7 +511,50 @@ router.post('/update', (req,res) => {
 
 });
 
+// @route   POST api/profile/txt
+// @desc    create or edit user profile
+// @access  private
+router.post(
+    '/txt', 
+    //passport.authenticate('jwt', {session: false}), 
+    (req, res) => {
 
+        
+        //get fields
+        const profileFields = {};
+        
+        if(req.body.name) profileFields.name = req.body.name;
+        if(req.body.sex) profileFields.sex = req.body.sex;
+        if(req.body.age) profileFields.age = req.body.age;
+        if(req.body.city) profileFields.city = req.body.city;
+        if(req.body.state) profileFields.state = req.body.state;
+        if(req.body.interests) profileFields.interests = req.body.interests; 
+        
+        const db = serv.db2;
+        const people = db.collection("people");
+            //auth.insert({ "foo" : "bar" })
+        people.find({}).toArray(function(err, docs) {
+            //assert.equal(err, null);
+            console.log("Found the following records");
+            console.log(docs)
+            let j = docs[0];
+
+            profileFields.id = j.people.length; 
+            j.people.push(profileFields);
+            
+            people.updateOne(
+                { }, {$set: j}
+                
+            )  
+        })
+        res.json(profileFields.id);
+
+    }
+    
+);
+
+//old mongo routes
+{
 // @route   GET api/profile/handle/:handle
 // @desc    get profile by handle
 // @access  public
@@ -612,48 +654,7 @@ router.post(
 
 
 
-// @route   POST api/profile/txt
-// @desc    create or edit user profile
-// @access  private
-router.post(
-    '/txt', 
-    //passport.authenticate('jwt', {session: false}), 
-    (req, res) => {
 
-        
-        //get fields
-        const profileFields = {};
-        
-        if(req.body.name) profileFields.name = req.body.name;
-        if(req.body.sex) profileFields.sex = req.body.sex;
-        if(req.body.age) profileFields.age = req.body.age;
-        if(req.body.city) profileFields.city = req.body.city;
-        if(req.body.state) profileFields.state = req.body.state;
-        if(req.body.interests) profileFields.interests = req.body.interests; 
-        
-        fs.readFile("People.txt", (err,data) => {
-            if (err) {
-                return console.error(err);
-            }
-            const str = data.toString();
-            const j = JSON.parse(str);
-            profileFields.id = j.people.length; 
-            j.people.push(profileFields);
-            const sj = JSON.stringify(j);
-
-            fs.writeFile('People.txt', sj, (err) => {  
-                // throws an error, you could also catch it here
-                if (err) throw err;
-            
-                // success case, the file was saved
-                console.log('saved!');
-            });
-        })
-        res.json(profileFields.id);
-
-    }
-    
-);
 
 // @route   POST api/profile/experience
 // @desc    add experience to profile
@@ -731,5 +732,7 @@ router.delete('/', passport.authenticate('jwt', {session: false}),
         })
         
 });
+}
+
 
 module.exports = router;

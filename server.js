@@ -103,10 +103,39 @@ app.use(bodyParser.json());
 const db = require('./config/keys').mongoURI;
 
 //connect to mongodb
-mongoose
-    .connect(db)
-    .then(() => console.log("mongoDB connected"))
-    .catch(err => console.log(err));
+// mongoose
+//     .connect(db)
+//     .then(() => console.log("mongoDB connected"))
+//     .catch(err => console.log(err));
+
+
+//connect to mongodb
+    const MongoClient = require('mongodb').MongoClient;
+    const assert = require('assert');
+    
+    // Connection URL
+    const url = 'mongodb://tcrawley:sponge33@ds213513.mlab.com:13513/nector';
+    
+    // Database Name
+    const dbName = 'nector';
+    
+    // Create a new MongoClient
+    const client = new MongoClient(url);
+    
+    // Use connect method to connect to the Server
+    client.connect(function(err) {
+      assert.equal(null, err);
+      console.log("Connected successfully to server");
+    
+      const db = client.db(dbName);
+      module.exports.db2 = db; 
+        
+      
+      
+      //client.close();
+    });
+
+    
 
 //passport middleware
 app.use(passport.initialize());

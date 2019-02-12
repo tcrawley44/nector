@@ -297,7 +297,7 @@ router.post('/search', (req,res) => {
         console.log("current user id: ", currentUserId);
         j.people[currentUserId]["queries"].push({name:req.body.queryName, results: matches2});
 
-        auth.updateOne(
+        people.updateOne(
             { }, {$set: j}
             
         )      

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const serv = require('../../server');
 
 //load user model
 const node = require('../../models/node');
@@ -12,12 +12,14 @@ router.post(
     //passport.authenticate('jwt', {session: false}), 
     (req, res) => {
 
-        fs.readFile("input.txt", (err,data) => {
-            if (err) {
-                return console.error(err);
-            }
-            const str = data.toString();
-            const j = JSON.parse(str);
+        const db = serv.db2;
+        const categories = db.collection("categories");
+          //auth.insert({ "foo" : "bar" })
+        categories.find({}).toArray(function(err, docs) {
+            //assert.equal(err, null);
+            console.log("Found the following records");
+            console.log(docs)
+            let j = docs[0];
             
             
             
@@ -57,14 +59,10 @@ router.post(
             place(j)
 
             //save
-            const sj = JSON.stringify(j);
-            fs.writeFile('input.txt', sj, (err) => {  
-                // throws an error, you could also catch it here
-                if (err) throw err;
-            
-                // success case, the file was saved
-                console.log('saved!');
-            });
+            categories.updateOne(
+                { }, {$set: j}
+                
+            ) 
 
             res.json({"complete":"complete"});
         })           

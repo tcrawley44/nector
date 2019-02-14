@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import TextFieldGroup from "../common/TextFieldGroup";
 import {connect} from 'react-redux';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {getProfiles} from '../../actions/profileActions';
 import Profiles from "../profiles/Profiles";
 import {registerUser, newLoginUser} from "../../actions/authActions";
 import {withRouter} from "react-router-dom";
@@ -23,7 +24,7 @@ class Login extends Component {
         
     }
     componentDidMount(){
-        
+        this.props.getProfiles(); 
     }
     componentWillReceiveProps(){
         
@@ -227,11 +228,13 @@ class Login extends Component {
 
 
 Login.propTypes = {
-    auth: PropTypes.object
+    auth: PropTypes.object,
+    getProfiles: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    profile: state.profile
 });
 
-export default connect(mapStateToProps, {registerUser, newLoginUser})(withRouter(Login));
+export default connect(mapStateToProps, {getProfiles, registerUser, newLoginUser})(withRouter(Login));

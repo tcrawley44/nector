@@ -18,7 +18,7 @@ class Profiles extends Component {
            currentProfile: ""
         
         }
-        
+        this.props.getProfiles()
         
     }
 
@@ -51,13 +51,57 @@ class Profiles extends Component {
         let more;
         let network2; 
         let displayProfile = true; 
+        let isUsersAccount; 
+        let displayEditButton; 
+        
+        console.log(this.props.match.params.id, "test param");
+        console.log(this.props.match.params.id, "test param");
+        if(localStorage.user === this.props.match.params.id){
+            isUsersAccount = true; 
+            
+        }else{
+            isUsersAccount = false; 
+        }
+        console.log(isUsersAccount);
+
+        let currentPerson = this.props.profile.profile.people[this.props.match.params.id];
+        console.log(currentPerson.isClaimed, "curr is claimed");
+        console.log(currentPerson.hasOwnProperty('isClaimed'), "has prop");
+        if((currentPerson.hasOwnProperty('isClaimed'))&& (currentPerson.isClaimed === "true") ){
+            if(isUsersAccount){
+                displayEditButton = true; 
+                console.log("account match and is claimed");
+            }else{
+                displayEditButton = false; 
+                console.log("account not match and is claimed");
+            }
+        }else{
+            displayEditButton = true; 
+            console.log("not claimed");
+        }
+
+        let editButtonView; 
+        if(displayEditButton){
+            editButtonView = (
+                <div className = "btn btn-info ml-2" onClick ={() => {
+                    this.setState(prevState => ({
+                        displayEdit: !prevState.displayEdit
+                        
+                    }))}}>
+                    
+                    Edit Profile
+                    
+                </div>
+            )
+        }
+
         if(displayMore){
             more = (<div className = " mt-2">
                 <ProfileInterests tree2 = {this.state.currentProfile.interests[0]}/>
             </div>)
             
         }
-        if(displayNetwork){
+        if(isUsersAccount){
             console.log(network, "network")
             network2 = (
                 /* <div className = "mt-2 ml-2">
@@ -117,15 +161,7 @@ class Profiles extends Component {
                                     Basic Info
                                     
                                 </div>
-                                <div className = "btn btn-info ml-2" onClick ={() => {
-                                    this.setState(prevState => ({
-                                        displayEdit: !prevState.displayEdit
-                                        
-                                    }))}}>
-                                    
-                                    Edit Profile
-                                    
-                                </div>
+                                {editButtonView}
                                 
                             
 
@@ -143,9 +179,10 @@ class Profiles extends Component {
                                     </div>
                                     {more}
                                 </div>
-                                {ints}<div className = "mt-2 ">
-                                    <ProfileInterests tree2 = {network}/>    
+                                <div className = "mt-2">
+                                {network2}    
                                 </div>
+                                
                                 
                             </div>
                             
@@ -224,6 +261,7 @@ Profiles.propTypes = {
     profile: PropTypes.object.isRequired,
     network: PropTypes.object,
     auth: PropTypes.object
+
 }
 
 const mapStateToProps = state => ({

@@ -30,7 +30,7 @@ export const newLoginUser = userData => dispatch => {
         .catch(err => 
             dispatch({
                 type: GET_ERRORS,
-                payload: err.response.data
+                payload: {"error":"error"}
             })
         )
 }

@@ -326,6 +326,7 @@ router.post('/searchByName', (req,res) => {
             console.log(j.people[i].name);
             if(j.people[i].name === req.body.name){
                 id = j.people[i].id
+                j.people[i]["isClaimed"] = "true";
                 found = true; 
             }else{
                 i = i + 1;
@@ -335,7 +336,7 @@ router.post('/searchByName', (req,res) => {
         }
         if(!found){
             id = j.people.length
-            j.people.push({"name": req.body.name, "id": j.people.length, interests:[["Interests"]]})
+            j.people.push({"name": req.body.name, "isClaimed": "true", "id": j.people.length, interests:[["Interests"]]})
             
             people.updateOne(
                 { }, {$set: j}
@@ -351,25 +352,33 @@ router.post('/searchByName', (req,res) => {
             console.log(docs)
             let k = docs[0].all;
 
-            let i2 = 0; 
-            let found2 = false; 
-            console.log(k.length);
-            while((i2<k.length && !found2)){
-                console.log(k[i2].email);
-                if(k[i2].email === req.body.email){
+            // let i2 = 0; 
+            // let found2 = false; 
+            // console.log(k.length);
+            // while((i2<k.length && !found2)){
+            //     console.log(k[i2].email);
+            //     console.log(req.body.email, "req email");
+            //     if(k[i2].email === req.body.email){
                     
-                    found2 = true; 
-                }else{
-                    i2 = i2 + 1;
-                }
+            //         found2 = true; 
+            //     }else{
+            //         i2 = i2 + 1;
+            //     }
                 
                 
-            }
-            k[i2]["id"] = id;
+            // }
+            
+            
+            k[k.length-1]["id"] = id;
+            
+            let k2 = docs[0];
+            k2.all = k; 
+
             
 
+
             auth.updateOne(
-                { }, {$set: k}
+                { }, {$set: k2}
                 
             )  
         })

@@ -106,10 +106,13 @@ export const updateProfile = (data,history) => dispatch => {
     
     axios
         .post("/api/profiles/update",data)
-        .then(res => 
+        .then(res => {
+            dispatch({
+                type: GET_PROFILES,
+                payload: res.data.people
+            })
             
-            history.push("/profile/" + res.data)
-            
+            }
         )
         
             

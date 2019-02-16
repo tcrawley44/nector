@@ -80,6 +80,12 @@ class EditPerson extends Component {
         //console.log("what about here");
         
         this.props.updateProfile(profileData, this.props.history);
+
+        this.props.history.push({
+            pathname: ('/profile/' + this.props.profile.profile.people.length),
+            
+            state: { passedPerson: profileData }
+          })
         
         
         

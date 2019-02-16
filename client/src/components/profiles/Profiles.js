@@ -35,6 +35,8 @@ class Profiles extends Component {
     }
   
     render() {
+        let box; 
+        if(this.props.profile.profile.people != null){
         const {profile, network, loading} = this.props.profile;
         console.log(profile, "profile");
         const {displayInfo,displayEdit, displayNetwork, displayMore, displayInterests } = this.state; 
@@ -44,7 +46,7 @@ class Profiles extends Component {
             this.state.currentProfile = profile.people[this.props.match.params.id];
             
         }
-        let box; 
+        
         let info;
         let profileItems;
         let ints; 
@@ -53,33 +55,41 @@ class Profiles extends Component {
         let displayProfile = true; 
         let isUsersAccount; 
         let displayEditButton; 
+        let currentPerson;
         
-        console.log(this.props.match.params.id, "test param");
-        console.log(this.props.match.params.id, "test param");
-        if(localStorage.user === this.props.match.params.id){
-            isUsersAccount = true; 
-            
+        if(this.props.match.params.id >= this.props.profile.profile.people.length){
+            currentPerson = this.props.location.state.passedPerson;
+            this.state.currentProfile = currentPerson;
         }else{
-            isUsersAccount = false; 
+            currentPerson = profile.people[this.props.match.params.id];
         }
-        console.log(isUsersAccount);
 
-        let currentPerson = this.props.profile.profile.people[this.props.match.params.id];
-        console.log(currentPerson.isClaimed, "curr is claimed");
-        console.log(currentPerson.hasOwnProperty('isClaimed'), "has prop");
-        if((currentPerson.hasOwnProperty('isClaimed'))&& (currentPerson.isClaimed === "true") ){
-            if(isUsersAccount){
-                displayEditButton = true; 
-                console.log("account match and is claimed");
+        
+            if(localStorage.user === this.props.match.params.id){
+                isUsersAccount = true; 
+                
             }else{
-                displayEditButton = false; 
-                console.log("account not match and is claimed");
+                isUsersAccount = false; 
             }
-        }else{
-            displayEditButton = true; 
-            console.log("not claimed");
-        }
+            console.log(isUsersAccount);
 
+            
+            console.log(currentPerson, "currpurr");
+            
+            console.log(currentPerson.hasOwnProperty('isClaimed'), "has prop");
+            if((currentPerson.hasOwnProperty('isClaimed'))&& (currentPerson.isClaimed === "true") ){
+                if(isUsersAccount){
+                    displayEditButton = true; 
+                    console.log("account match and is claimed");
+                }else{
+                    displayEditButton = false; 
+                    console.log("account not match and is claimed");
+                }
+            }else{
+                displayEditButton = true; 
+                console.log("not claimed");
+            }
+        
         let editButtonView; 
         if(displayEditButton){
             editButtonView = (
@@ -238,7 +248,11 @@ class Profiles extends Component {
                     }
                 }
             }
-        
+        }else{
+            box = (
+                <h1>loading...</h1>
+            )
+        }
         return (
             <div >
                 

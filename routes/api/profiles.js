@@ -46,7 +46,7 @@ router.get('/all', (req,res) => {
         //assert.equal(err, null);
         console.log("Found the following records");
         console.log(docs)
-        let j = docs[0];
+        let j = {"people": docs[0].people};
 
         res.json(j);
         
@@ -507,7 +507,8 @@ router.post('/update', (req,res) => {
                     
                 )  
                 console.log(finalId, "finid");
-                res.json(finalId);
+                let ob = {people: j.people, finalId: finalId};
+                res.json(ob);
             }
             i = i + 1; 
             

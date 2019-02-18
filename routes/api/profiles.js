@@ -216,6 +216,7 @@ router.post('/search', (req,res) => {
         console.log("Found the following records");
         console.log(docs)
         let j = docs[0];
+        console.log(docs[0].people[0], "docs");
         let matches;
         console.log(req.body.interests);
         if(req.body.interests.length>0){
@@ -250,7 +251,7 @@ router.post('/search', (req,res) => {
             while((i<j.people.length)){
                 
                 
-                
+                console.log("interest before sending", j.people[i].interests[0]);
                 searchTree(j.people[i].interests[0], req.body.interests[0][1]);
 
 

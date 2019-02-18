@@ -194,7 +194,7 @@ class SearchPeople extends Component {
                                         
                                     />
                                     <div className = "mt-5"></div>
-                                    <TextFieldGroup 
+                                    {/* <TextFieldGroup 
                                         placeholder = "name"
                                         name = "name"
                                         value = {this.state.name}
@@ -203,7 +203,7 @@ class SearchPeople extends Component {
                                         info = "name"
                                         autoComplete = "off"
                                         
-                                    />
+                                    /> */}
                                     <SelectListGroup 
                                         placeholder = "sex"
                                         name = "sex"
@@ -213,7 +213,7 @@ class SearchPeople extends Component {
                                         error = {errors.sex}
                                         info = "sex"
                                     />
-                                    <TextFieldGroup 
+                                    {/* <TextFieldGroup 
                                         placeholder = "age"
                                         name = "age"
                                         value = {this.state.age}
@@ -236,7 +236,7 @@ class SearchPeople extends Component {
                                         onChange = {this.onChange}
                                         error = {errors.state}
                                         info = "state"
-                                    />
+                                    /> */}
                                     
                                     
                                     

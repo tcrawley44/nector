@@ -57,6 +57,9 @@ class Profiles extends Component {
         let displayEditButton; 
         let currentPerson;
         
+
+        
+        
         if(this.props.match.params.id >= this.props.profile.profile.people.length){
             currentPerson = this.props.location.state.passedPerson;
             this.state.currentProfile = currentPerson;
@@ -88,6 +91,17 @@ class Profiles extends Component {
             }else{
                 displayEditButton = true; 
                 console.log("not claimed");
+            }
+
+            let stars; 
+            if(currentPerson.hasOwnProperty('stars')){
+                stars = (
+                    <p className = "text-light">Stars: {currentPerson.stars} </p>
+                )
+            }else{
+                stars = (
+                <p className = "text-light">Stars: 0 </p>
+                )
             }
         
         let editButtonView; 
@@ -163,6 +177,7 @@ class Profiles extends Component {
                         box = (
                             <div>
                                 <h1 className = " display-5 text-center text-light">{this.state.currentProfile.name}</h1>
+                                {stars}
                                 <div className = "btn btn-info  " onClick ={() => {
                                     this.setState(prevState => ({
                                         displayInfo: !prevState.displayInfo

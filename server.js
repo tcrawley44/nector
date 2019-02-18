@@ -151,6 +151,7 @@ app.use('/api/nodes', nodes);
 app.use('/api/tree', tree);
 app.use('/api/auth', auth);
 
+
 // server static assets if in production
 if(process.env.NODE_ENV === "production"){
     //set static folder

@@ -36,238 +36,248 @@ class Profiles extends Component {
   
     render() {
         let box; 
-        if(this.props.profile.profile.people != null){
-        const {profile, network, loading} = this.props.profile;
-        console.log(profile, "profile");
-        const {displayInfo,displayEdit, displayNetwork, displayMore, displayInterests } = this.state; 
-        console.log(profile, "new profiles");
-        if(profile != null){
-            
-            this.state.currentProfile = profile.people[this.props.match.params.id];
-            
-        }
-        
-        let info;
-        let profileItems;
-        let ints; 
-        let more;
-        let network2; 
-        let displayProfile = true; 
-        let isUsersAccount; 
-        let displayEditButton; 
-        let currentPerson;
-        
+        if(this.props.profile.profile){
 
         
-        
-        if(this.props.match.params.id >= this.props.profile.profile.people.length){
-            currentPerson = this.props.location.state.passedPerson;
-            this.state.currentProfile = currentPerson;
-        }else{
-            currentPerson = profile.people[this.props.match.params.id];
-        }
-
-        
-            if(localStorage.user === this.props.match.params.id){
-                isUsersAccount = true; 
+            if(this.props.profile.profile.people){
+            const {profile, network, loading} = this.props.profile;
+            console.log(profile, "profile");
+            const {displayInfo,displayEdit, displayNetwork, displayMore, displayInterests } = this.state; 
+            console.log(profile, "new profiles");
+            if(profile.people){
                 
-            }else{
-                isUsersAccount = false; 
+                this.state.currentProfile = profile.people[this.props.match.params.id];
+                
             }
-            console.log(isUsersAccount);
+            
+            let info;
+            let profileItems;
+            let ints; 
+            let more;
+            let network2; 
+            let displayProfile = true; 
+            let isUsersAccount; 
+            let displayEditButton; 
+            let currentPerson;
+            
 
             
-            console.log(currentPerson, "currpurr");
             
-            console.log(currentPerson.hasOwnProperty('isClaimed'), "has prop");
-            if((currentPerson.hasOwnProperty('isClaimed'))&& (currentPerson.isClaimed === "true") ){
-                if(isUsersAccount){
-                    displayEditButton = true; 
-                    console.log("account match and is claimed");
+            if(this.props.match.params.id >= this.props.profile.profile.people.length){
+                currentPerson = this.props.location.state.passedPerson;
+                this.state.currentProfile = currentPerson;
+            }else{
+                currentPerson = profile.people[this.props.match.params.id];
+            }
+
+            
+                if(localStorage.user === this.props.match.params.id){
+                    isUsersAccount = true; 
+                    
                 }else{
-                    displayEditButton = false; 
-                    console.log("account not match and is claimed");
+                    isUsersAccount = false; 
                 }
-            }else{
-                displayEditButton = true; 
-                console.log("not claimed");
-            }
+                console.log(isUsersAccount);
 
-            let stars; 
-            if(currentPerson.hasOwnProperty('stars')){
-                stars = (
-                    <p className = "text-light">Stars: {currentPerson.stars} </p>
-                )
-            }else{
-                stars = (
-                <p className = "text-light">Stars: 0 </p>
-                )
-            }
-        
-        let editButtonView; 
-        if(displayEditButton){
-            editButtonView = (
-                <div className = "btn btn-info ml-2" onClick ={() => {
-                    this.setState(prevState => ({
-                        displayEdit: !prevState.displayEdit
-                        
-                    }))}}>
-                    
-                    Edit Profile
-                    
-                </div>
-            )
-        }
-
-        if(displayMore){
-            more = (<div className = " mt-2">
-                <ProfileInterests tree2 = {this.state.currentProfile.interests[0]}/>
-            </div>)
-            
-        }
-        if(isUsersAccount){
-            console.log(network, "network")
-            network2 = (
-                /* <div className = "mt-2 ml-2">
-                    <Friends current = {this.state.currentProfile.name}/>
-
-                    <Queries current = {this.state.currentProfile.name}/>
-                </div>  */
                 
-                <ProfileInterests updateParent = {this.update} tree2 = {network}/>           
-                                   
-            )
-               
-        }
-        
-        
-        
-            if(displayEdit){
-                box = (
-                    <div>
-                        <div className = "btn btn-info w-25" onClick ={() => {
-                            this.setState(prevState => ({
-                                displayEdit: !prevState.displayEdit
-                            }))}}>
-                            
-                            Back
-                            
-                        </div>
-                        <EditPerson currName = {this.state.currentProfile.name}/>
-                    </div>
-                )
-            }else{
+                console.log(currentPerson, "currpurr");
+                
+                console.log(currentPerson.hasOwnProperty('isClaimed'), "has prop");
+                if((currentPerson.hasOwnProperty('isClaimed'))&& (currentPerson.isClaimed === "true") ){
+                    if(isUsersAccount){
+                        displayEditButton = true; 
+                        console.log("account match and is claimed");
+                    }else{
+                        displayEditButton = false; 
+                        console.log("account not match and is claimed");
+                    }
+                }else{
+                    displayEditButton = true; 
+                    console.log("not claimed");
+                }
 
-            
-                if(displayInfo){
-                    info = (
-                        <div className = "row">
-                            <div className = "col text-light">
-                                <h4> {this.state.currentProfile.sex}</h4>
-                                <h4> {this.state.currentProfile.age}</h4>
-                                <h4> {this.state.currentProfile.city}, {this.state.currentProfile.state}</h4>
-                            </div>
-                        </div>
+                let stars; 
+                if(currentPerson.hasOwnProperty('stars')){
+                    stars = (
+                        <p className = "text-light">Stars: {currentPerson.stars} </p>
+                    )
+                }else{
+                    stars = (
+                    <p className = "text-light">Stars: 0 </p>
                     )
                 }
-                if (profile === null || loading) {
-                    profileItems = "loading";
-                }else{
-                    if(displayProfile){
-                        box = (
-                            <div>
-                                <h1 className = " display-5 text-center text-light">{this.state.currentProfile.name}</h1>
-                                {stars}
-                                <div className = "btn btn-info  " onClick ={() => {
-                                    this.setState(prevState => ({
-                                        displayInfo: !prevState.displayInfo
-                                    }))}}>
-                                    
-                                    Basic Info
-                                    
-                                </div>
-                                {editButtonView}
-                                
+            
+            let editButtonView; 
+            if(displayEditButton){
+                editButtonView = (
+                    <div className = "btn btn-info ml-2" onClick ={() => {
+                        this.setState(prevState => ({
+                            displayEdit: !prevState.displayEdit
                             
+                        }))}}>
+                        
+                        Edit Profile
+                        
+                    </div>
+                )
+            }
 
-                                {info}
-                                <div >
+            if(displayMore){
+                more = (<div className = " mt-2">
+                    <ProfileInterests tree2 = {this.state.currentProfile.interests[0]}/>
+                </div>)
+                
+            }
+            if(isUsersAccount){
+                console.log(network, "network")
+                network2 = (
+                    /* <div className = "mt-2 ml-2">
+                        <Friends current = {this.state.currentProfile.name}/>
+
+                        <Queries current = {this.state.currentProfile.name}/>
+                    </div>  */
+                    
+                    <ProfileInterests updateParent = {this.update} tree2 = {network}/>           
+                                    
+                )
+                
+            }
+            
+            
+            
+                if(displayEdit){
+                    box = (
+                        <div>
+                            <div className = "btn btn-info w-25" onClick ={() => {
+                                this.setState(prevState => ({
+                                    displayEdit: !prevState.displayEdit
+                                }))}}>
                                 
-                                    <div className = "btn btn-info mt-2 w-25" onClick ={() => {
-                                        this.setState(prevState => ({
-                                            displayMore: !prevState.displayMore
-                                            
-                                        }))}}>
-                                        
-                                        More
-                                        
-                                    </div>
-                                    {more}
-                                </div>
-                                <div className = "mt-2">
-                                {network2}    
-                                </div>
-                                
+                                Back
                                 
                             </div>
-                            
-                        )
-                    }else{
+                            <EditPerson currName = {this.state.currentProfile.name}/>
+                        </div>
+                    )
+                }else{
 
-                        let newProfile = profile.people;
-                        if(newProfile.length > 0){
-                            //console.log(profile[0]);
-                            profileItems = newProfile.map(profile => (
-                                
-                                <div className = "btn personButton btn-info" onClick ={() => {
-                                    this.setState(prevState => ({
-                                        displayProfile: !prevState.displayProfile
-                                        
-                                    }))
-                                    this.setState(prevState => ({
-                                        currentProfile: profile
-                                    
-                                    }))
-                                        
-                                    }}>
-                                    
-                                    {profile.name}
-                                    
+                
+                    if(displayInfo){
+                        info = (
+                            <div className = "row">
+                                <div className = "col text-light">
+                                    <h4> {this.state.currentProfile.sex}</h4>
+                                    <h4> {this.state.currentProfile.age}</h4>
+                                    <h4> {this.state.currentProfile.city}, {this.state.currentProfile.state}</h4>
                                 </div>
-                                /* <ProfileItem key = {profile._id} profile = {profile} /> */
-                            ))
+                            </div>
+                        )
+                    }
+                    if (profile === null || loading) {
+                        profileItems = "loading";
+                    }else{
+                        if(displayProfile){
                             box = (
                                 <div>
-                                    <h1 className = " display-4 text-center">List People</h1>
-                                            
-                                                
-                                            
-
-                                    <div className = "profiles">
+                                    <h1 className = " display-5 text-center text-light">{this.state.currentProfile.name}</h1>
+                                    {stars}
+                                    <div className = "btn btn-info  " onClick ={() => {
+                                        this.setState(prevState => ({
+                                            displayInfo: !prevState.displayInfo
+                                        }))}}>
                                         
-                                        <div className = "container">
-                                            <div className = "row">
-                                                <div className = "col-md-4">
-                                                    
-                                                    {profileItems}
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                        Basic Info
+                                        
                                     </div>
+                                    {editButtonView}
+                                    
+                                
+
+                                    {info}
+                                    <div >
+                                    
+                                        <div className = "btn btn-info mt-2 w-25" onClick ={() => {
+                                            this.setState(prevState => ({
+                                                displayMore: !prevState.displayMore
+                                                
+                                            }))}}>
+                                            
+                                            More
+                                            
+                                        </div>
+                                        {more}
+                                    </div>
+                                    <div className = "mt-2">
+                                    {network2}    
+                                    </div>
+                                    
+                                    
                                 </div>
+                                
                             )
                         }else{
-                            profileItems = <h4>no profiles found...</h4>
+
+                            let newProfile = profile.people;
+                            if(newProfile.length > 0){
+                                //console.log(profile[0]);
+                                profileItems = newProfile.map(profile => (
+                                    
+                                    <div className = "btn personButton btn-info" onClick ={() => {
+                                        this.setState(prevState => ({
+                                            displayProfile: !prevState.displayProfile
+                                            
+                                        }))
+                                        this.setState(prevState => ({
+                                            currentProfile: profile
+                                        
+                                        }))
+                                            
+                                        }}>
+                                        
+                                        {profile.name}
+                                        
+                                    </div>
+                                    /* <ProfileItem key = {profile._id} profile = {profile} /> */
+                                ))
+                                box = (
+                                    <div>
+                                        <h1 className = " display-4 text-center">List People</h1>
+                                                
+                                                    
+                                                
+
+                                        <div className = "profiles">
+                                            
+                                            <div className = "container">
+                                                <div className = "row">
+                                                    <div className = "col-md-4">
+                                                        
+                                                        {profileItems}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                )
+                            }else{
+                                profileItems = <h4>no profiles found...</h4>
+                            }
                         }
                     }
                 }
+            }else{
+                box = (
+                    <h1>loading...</h1>
+                )
             }
         }else{
             box = (
                 <h1>loading...</h1>
             )
         }
+
+
         return (
             <div >
                 

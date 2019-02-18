@@ -13,6 +13,7 @@ import Welcome from "./components/home/Welcome";
 import Home from "./components/home/Home";
 import AddPerson from "./components/add-person/AddPerson";
 import EditPerson from "./components/edit-person/EditPerson";
+import Chat from "./components/chat/Chat";
 import './App.css';
 
 //check for token
@@ -66,6 +67,7 @@ class App extends Component {
               <Router>
                 <div>
                 <Link to = {"/profile/" + localStorage.user } className = "btn btn-info mt-2">Home</Link>
+                <Link to = {"/chat/"  } className = "btn btn-info mt-2 ml-2">Chat</Link>
                   <div className = "row">
                       
                       
@@ -79,6 +81,7 @@ class App extends Component {
                             <Route exact path = '/welcome' component = {Welcome} />
                             <Route exact path = '/add-person' component = {AddPerson} />
                             <Route exact path = '/edit-person/:id' component = {EditPerson} />
+                            <Route exact path = '/chat/' component = {Chat} />
                           </div>
                         </div>    
 

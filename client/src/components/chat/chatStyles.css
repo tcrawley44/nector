@@ -1,0 +1,6 @@
+.postBlock{
+    height: 430px;
+    width: 340px;
+    overflow-y: scroll;
+    margin-top: 10px; 
+}

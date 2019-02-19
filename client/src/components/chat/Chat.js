@@ -4,6 +4,7 @@ import {getPosts, addPosts} from "../../actions/postActions";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import {withRouter} from "react-router-dom";
 import PropTypes from 'prop-types';
+import "./chatStyles.css";
 
 class Chat extends Component {
 
@@ -22,7 +23,7 @@ class Chat extends Component {
 
     onSubmit(e){
         e.preventDefault();
-
+        
         let data = {
             post: this.state.post
         }
@@ -73,7 +74,7 @@ class Chat extends Component {
                 <input type = "submit" value= "Submit" className = "btn btn-info btn-block mt-2"/>
             </form>   
 
-            <div className = "container mt-3">
+            <div className = "container postBlock mt-3">
                 <div className = "col">
                     {listPosts}
                     <p className = "text-light"></p>

@@ -12,7 +12,7 @@ class Chat extends Component {
         super(props);
         this.state = {
             post: "",
-            
+            update: 0
             
         }
         
@@ -28,7 +28,8 @@ class Chat extends Component {
             post: this.state.post
         }
         this.props.addPosts(data); 
-        this.props.getPosts(); 
+        
+        this.state.post = "";
         
         
     }
@@ -37,6 +38,20 @@ class Chat extends Component {
         
         this.setState({[e.target.name]: e.target.value});
     
+    }
+
+    scrollToBottom = () => {
+        this.el.scrollIntoView();
+    }
+      
+    componentDidMount() {
+        this.props.getPosts(); 
+        this.scrollToBottom();
+        
+    }
+      
+    componentDidUpdate() {
+        this.scrollToBottom();
     }
 
 
@@ -74,10 +89,10 @@ class Chat extends Component {
                 <input type = "submit" value= "Submit" className = "btn btn-info btn-block mt-2"/>
             </form>   
 
-            <div className = "container postBlock mt-3">
-                <div className = "col">
+            <div className = "container postBlock mt-2" >
+                <div className = "col" >
                     {listPosts}
-                    <p className = "text-light"></p>
+                    <div className = "text-light" ref={(el) => { this.el = el; }}></div>
                 </div>
 
                    

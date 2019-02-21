@@ -14,6 +14,7 @@ import Home from "./components/home/Home";
 import AddPerson from "./components/add-person/AddPerson";
 import EditPerson from "./components/edit-person/EditPerson";
 import Chat from "./components/chat/Chat";
+import Home2 from "./components/home/Home2";
 import './App.css';
 
 //check for token
@@ -61,19 +62,22 @@ class App extends Component {
           </div>
         </Router> */}
         
-        <div className = "half bg-dark ">
+        <div className = "bg-dark container3 flex-column" >
           <meta name = "mobile-web-app-capable" content = "yes"></meta>
-            <div className = "container-fluid bg-dark m-0">
+            <div className = "container-fluid appContainer bg-dark m-auto">
               <Router>
-                <div>
-                <Link to = {"/profile/" + localStorage.user } className = "btn btn-info mt-2">Home</Link>
-                <Link to = {"/chat/"  } className = "btn btn-info mt-2 ml-2">Chat</Link>
-                  <div className = "row">
+                <div className = "container2">
+                  <div >
+                    <Link to = {"/home/" } className = "btn btn-info mt-2">Home</Link>
+                    <Link to = {"/chat/"  } className = "btn btn-info mt-2 ml-2">Chat</Link>
+                    <Link to = {"/profile/" + localStorage.user } className = "btn btn-info mt-2 ml-2">Profile</Link>
+                  </div>
+                  <div className = "row half2">
                       
                       
                         
                         
-                        <div className = "profileContainer bg-dark container-fluid">
+                        <div className = "profileContainer2 bg-dark pb-2 p-3 container-fluid">
                           <div>
                             <Route exact path = '/' component = {Login} />
                             <Route exact path = '/profile/:id' component = {Profiles} />
@@ -82,6 +86,7 @@ class App extends Component {
                             <Route exact path = '/add-person' component = {AddPerson} />
                             <Route exact path = '/edit-person/:id' component = {EditPerson} />
                             <Route exact path = '/chat/' component = {Chat} />
+                            <Route exact path = '/home/' component = {Home2} />
                           </div>
                         </div>    
 
